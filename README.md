@@ -83,3 +83,61 @@ classDiagram
 - **Director (DiretorJogador):** Garante que os passos de construção sejam seguidos corretamente. Utiliza um Builder para criar um Jogador com configurações específicas.
 
 - **Product (Jogador):** O objeto complexo que está sendo construído.
+
+
+# Singleton
+
+## Intenção
+Garantir que apenas uma instância das configurações do jogo exista em toda a aplicação, fornecendo um acesso global e consistente a esses dados.
+
+## Motivação
+Em um jogo, é fundamental que configurações como o tamanho do tabuleiro e o número máximo de jogadores sejam definidas de forma centralizada. Se cada parte do jogo puder ter suas próprias configurações, surgirão inconsistências: um jogador pode estar em um tabuleiro de 7x9 enquanto outro está em um de 10x10, o que tornaria a experiência confusa e cheia de erros.
+
+O padrão Singleton resolve esse problema ao garantir que haja apenas uma instância da configuração do jogo, acessível a todas as partes do sistema. Isso significa que todos compartilham os mesmos valores, e qualquer alteração é refletida em todo o jogo, mantendo a coerência.
+
+Por exemplo, se o tabuleiro é 7x9, mas o sistema de colisões usa um grid de 10x12, isso pode resultar em bugs sérios, como jogadores aparecendo fora do mapa ou habilidades que funcionam em alguns módulos, mas falham em outros.
+
+## Cenário sem o Padrão
+```mermaid
+classDiagram
+    class ConfiguracaoJogo {
+        -int larguraTabuleiro
+        -int alturaTabuleiro
+        -int quantidadeMaximaJogador
+        +getLarguraTabuleiro()
+        +setLarguraTabuleiro()
+    }
+
+    class Tabuleiro {
+        -ConfiguracaoJogo config
+    }
+
+    class Jogador {
+        -ConfiguracaoJogo config
+    }
+
+    class MenuOpcoes {
+        -ConfiguracaoJogo config
+    }
+
+    Tabuleiro --> ConfiguracaoJogo
+    Jogador --> ConfiguracaoJogo
+    MenuOpcoes --> ConfiguracaoJogo
+```
+## Diagrama UML (Padrão)
+```mermaid
+
+ ```
+## Padrão aplicado no cenário
+
+No código fornecido, o padrão Singleton é aplicado para gerenciar as configurações globais do jogo:
+
+- Garante que todas as partes do jogo acessem as mesmas configurações.
+- Centraliza a gestão das configurações.
+- Permite modificações globais quando necessário.
+
+## Participantes
+
+- **Singleton (ConfiguracaoJogo)** - mantém a única instância da classe e fornece acesso global.
+  - Armazena os dados de configuração (`quantidadeMaximaJogador`, `larguraTabuleiro`, `alturaTabuleiro`).
+  - Implementa o método `getInstancia()` para controle de acesso.
