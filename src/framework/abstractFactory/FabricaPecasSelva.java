@@ -1,8 +1,8 @@
 package abstractFactory;
 
 import model.Jogador;
-import model.Peca;
 import model.Terreno;
+import model.pecas.Peca;
 
 public interface FabricaPecasSelva {
     Peca criarPeca(String tipo, Jogador jogador);
