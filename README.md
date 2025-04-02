@@ -51,10 +51,10 @@ classDiagram
 ```
 
 ## Participantes
-- **AbstractFactory (FabricaPecasSelva):** Interface com métodos para criar produtos abstratos
-- **ConcreteFactory:** Implementa a criação de produtos concretos
-- **AbstractProduct (Peca, Terreno):** Interfaces dos produtos
-- **ConcreteProduct (Leao, Agua):**  define um objeto-produto a ser criado pela correspondente fábrica concreta.
+- AbstractFactory (FabricaPecasSelva): Interface com métodos para criar produtos abstratos
+- ConcreteFactory: Implementa a criação de produtos concretos
+- AbstractProduct (Peca, Terreno): Interfaces dos produtos
+- ConcreteProduct (Leao, Agua):  define um objeto-produto a ser criado pela correspondente fábrica concreta.
 
 
 
@@ -136,13 +136,13 @@ classDiagram
 ```
 ## Participantes
 
-- **Builder (BuilderJogador):** Define a interface para construir diferentes partes do objeto Jogador. Fornece os métodos abstratos para personalização (`comNome()`, `comCor()`, etc.).
+- Builder (BuilderJogador): Define a interface para construir diferentes partes do objeto Jogador. Fornece os métodos abstratos para personalização (comNome(), comCor(), etc.).
 
-- **ConcreteBuilder (ConstrutorJogador):** Aqui temos a implementação concreta do Builder. O ConstrutorJogador é encarregado de construir o objeto Jogador de fato. Ele mantém a representação do jogador em um atributo interno e oferece métodos específicos para configurar suas propriedades, como `comNome()`, `comCor()` e `comPontos()`. Após definir todas as características desejadas, o método `construir()` é chamado para retornar o objeto Jogador completamente configurado e pronto para uso.
+- ConcreteBuilder (ConstrutorJogador):Aqui temos a implementação concreta do Builder. O ConstrutorJogador é encarregado de construir o objeto Jogador de fato. Ele mantém a representação do jogador em um atributo interno e oferece métodos específicos para configurar suas propriedades, como comNome(), comCor() e comPontos(). Após definir todas as características desejadas, o método construir() é chamado para retornar o objeto Jogador completamente configurado e pronto para uso.
 
-- **Director (DiretorJogador):** Garante que os passos de construção sejam seguidos corretamente. Utiliza um Builder para criar um Jogador com configurações específicas.
+- Director (DiretorJogador): Garante que os passos de construção sejam seguidos corretamente. Utiliza um Builder para criar um Jogador com configurações específicas.
 
-- **Product (Jogador):** O objeto complexo que está sendo construído.
+- Product (Jogador): O objeto complexo que está sendo construído.
 
 
 # Singleton
@@ -199,8 +199,8 @@ No código fornecido, o padrão Singleton é aplicado para gerenciar as configur
 ## Participantes
 
 - **Singleton (ConfiguracaoJogo)** - mantém a única instância da classe e fornece acesso global.
-  - Armazena os dados de configuração (`quantidadeMaximaJogador`, `larguraTabuleiro`, `alturaTabuleiro`).
-  - Implementa o método `getInstancia()` para controle de acesso.
+  - Armazena os dados de configuração (quantidadeMaximaJogador, larguraTabuleiro, alturaTabuleiro).
+  - Implementa o método getInstancia() para controle de acesso.
 
 # Padrão Prototype
 ## Intenção
@@ -272,11 +272,37 @@ classDiagram
     Peca --> Jogador
     Peca --> Posicao
  ```
-- **Padrão aplicado no cenário**:
+- Padrão aplicado no cenário:
 Com a aplicação do padrão Prototype, cada tipo de peça pode ser criado a partir de um protótipo existente. Isso simplifica a criação de novas peças e reduz a duplicação de código. Por exemplo, ao clonar uma peça existente, todas as suas propriedades são copiadas automaticamente.
 
 ## Participante
-- **Prototype (PecaPrototype)** Interface que define o método clonar() para permitir a clonagem de objetos.
-- **ConcretePrototype (Peca):** Classe abstrata que implementa PecaPrototype e fornece a lógica para clonagem e atributos das peças.
+- Prototype (PecaPrototype) Interface que define o método clonar() para permitir a clonagem de objetos.
+- ConcretePrototype (Peca): Classe abstrata que implementa PecaPrototype e fornece a lógica para clonagem e atributos das peças.
+
+
+# Padrão Facade  
+## Intenção  
+O padrão *Facade* visa simplificar o acesso a sistemas complexos, oferecendo uma interface de alto nível que reduz o acoplamento entre componentes e melhora a organização do código.  
+
+## Motivação  
+Durante o desenvolvimento do jogo, notamos que várias partes do código interagiam diretamente com regras complexas, como validação de movimentos e verificação de vencedores. Isso tornava o código difícil de ler e manter. Para resolver isso, criamos a RegrasJogoFacade, que centraliza todas as regras do jogo em um único ponto, permitindo chamadas simples e diretas sem expor a lógica interna.  
+
+### Antes do Facade  
+O código precisava interagir diretamente com várias classes diferentes, o que aumentava a complexidade e dificultava futuras modificações.  
+
+
+### Depois do Facade  
+Agora, a RegrasJogoFacade encapsula toda a lógica e expõe apenas os métodos essenciais, como movimentoValido(), capturaValida() e verificarVencedor(). Isso torna o código mais limpo e fácil de manter.  
+
+### Estrutura GOF
+
+![alt text](image.png)
+
+## Estrutura  
+O Facade no projeto é composto por:  
+- *RegrasJogoFacade (Interface)* → Define os métodos principais.  
+- *RegrasJogoFacadeImpl (Implementação)* → Coordena as chamadas para componentes internos.  
+- *GerenciadorTurnos, Tabuleiro, Peca, Jogador, etc.* → Componentes que lidam com regras específicas acessadas pela Facade.  
+
   
 
