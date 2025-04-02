@@ -282,7 +282,8 @@ Com a aplicação do padrão Prototype, cada tipo de peça pode ser criado a par
 
 # Padrão Facade  
 ## Intenção  
-O padrão *Facade* visa simplificar o acesso a sistemas complexos, oferecendo uma interface de alto nível que reduz o acoplamento entre componentes e melhora a organização do código.  
+
+Fornecer uma interface unificada para um conjunto de interfaces em um subsistema. O Facade define uma interface de nível mais alto que torna o subsistema mais fácil de ser usado, reduzindo o acoplamento e organizando melhor as interações entre os componentes internos.
 
 ## Motivação  
 Durante o desenvolvimento do jogo, notamos que várias partes do código interagiam diretamente com regras complexas, como validação de movimentos e verificação de vencedores. Isso tornava o código difícil de ler e manter. Para resolver isso, criamos a RegrasJogoFacade, que centraliza todas as regras do jogo em um único ponto, permitindo chamadas simples e diretas sem expor a lógica interna.  
