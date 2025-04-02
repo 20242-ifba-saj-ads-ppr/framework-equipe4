@@ -25,8 +25,10 @@ classDiagram
 	Jogo --> Tigre
 	Jogo --> Agua
 	Jogo --> Armadilha
-    
 ```
+### Estrutura do Padrão (GOF)
+![image](https://github.com/user-attachments/assets/09722940-c24c-4950-b8f1-7f57392a31f7)
+
 ### Diagrama UML (Padrão)
 ```mermaid
 classDiagram
@@ -47,8 +49,6 @@ classDiagram
 	FabricaPecasSelva --> Peca
 	FabricaPecasSelva --> Terreno
 ```
-### Estrutura do Padrão (GOF)
-![image](https://github.com/user-attachments/assets/09722940-c24c-4950-b8f1-7f57392a31f7)
 
 ## Participantes
 - **AbstractFactory (FabricaPecasSelva):** Interface com métodos para criar produtos abstratos
