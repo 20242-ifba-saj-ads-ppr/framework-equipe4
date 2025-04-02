@@ -1,3 +1,63 @@
+# Padrão Abstract Factory (Fábrica Abstrata)
+## Intenção
+Fornecer uma interface para criar famílias de objetos relacionados ou dependentes sem especificar suas classes concretas.
+
+## Motivação
+No desenvolvimento do Jogo da Selva, precisamos criar famílias de objetos, como animais e terrenos, que sejam consistentes em diferentes temas, como Realista, Cartoon e Pixel Art.
+Sem um padrão, o código ficaria confuso e difícil de manter, tornando a troca de temas e a adição de novos estilos complicadas. Para resolver isso, usamos o padrão Abstract Factory.
+Esse padrão define uma interface chamada FabricaPecasSelva, que inclui métodos como criarPeca() e criarTerreno(). Cada tema terá sua própria implementação dessa interface, garantindo que os objetos criados sejam sempre compatíveis com o estilo escolhido.
+
+### Cenário sem o Padrão
+```mermaid
+classDiagram
+	class Leao
+	class Tigre
+	class Agua
+	class Armadilha
+    
+	class Jogo {
+    	-List~Animal~ animais
+    	-List~Terreno~ terrenos
+    	+criarPecas()
+	}
+    
+	Jogo --> Leao
+	Jogo --> Tigre
+	Jogo --> Agua
+	Jogo --> Armadilha
+    
+```
+### Diagrama UML (Padrão)
+```mermaid
+classDiagram
+	class FabricaPecasSelva {
+    	<<interface>>
+    	+criarPeca(String, Jogador) Peca
+    	+criarTerreno(String) Terreno
+	}
+    
+	class Peca {
+    	<<interface>>
+	}
+    
+	class Terreno {
+    	<<interface>>
+	}
+    
+	FabricaPecasSelva --> Peca
+	FabricaPecasSelva --> Terreno
+```
+### Estrutura do Padrão (GOF)
+![image](https://github.com/user-attachments/assets/09722940-c24c-4950-b8f1-7f57392a31f7)
+
+## Participantes
+- **AbstractFactory (FabricaPecasSelva):** Interface com métodos para criar produtos abstratos
+- **ConcreteFactory:** Implementa a criação de produtos concretos
+- **AbstractProduct (Peca, Terreno):** Interfaces dos produtos
+- **ConcreteProduct (Leao, Agua):**  define um objeto-produto a ser criado pela correspondente fábrica concreta.
+
+
+
 # Padrão Builder
 
 ## Intenção
