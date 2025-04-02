@@ -185,7 +185,7 @@ classDiagram
     MenuOpcoes --> ConfiguracaoJogo
 ```
 ## Diagrama UML (Padrão)
-```mermaid
+``` mermaid
 
  ```
 ## Padrão aplicado no cenário
@@ -201,3 +201,82 @@ No código fornecido, o padrão Singleton é aplicado para gerenciar as configur
 - **Singleton (ConfiguracaoJogo)** - mantém a única instância da classe e fornece acesso global.
   - Armazena os dados de configuração (`quantidadeMaximaJogador`, `larguraTabuleiro`, `alturaTabuleiro`).
   - Implementa o método `getInstancia()` para controle de acesso.
+
+# Padrão Prototype
+## Intenção
+Permitir a criação de novos objetos através da clonagem de instâncias existentes, evitando a necessidade de subclasses para criação de objetos e fornecendo um mecanismo flexível para criação de objetos complexos.
+
+## Motivação
+Em um jogo de tabuleiro na selva, exploradores, animais e armadilhas precisam ser criados dinamicamente. O desafio é permitir a criação de novos tipos de peças sem repetir código ou dificultar a manutenção do jogo.
+A solução está no uso de protótipos: em vez de criar cada peça do zero, o jogo pode clonar um modelo pré-existente. Assim, cada ferramenta do jogo gera novas peças a partir de um protótipo, tornando o código mais flexível.
+
+### Cenário sem o Padrão
+``` mermaid
+classDiagram
+    class Jogador
+    class Posicao
+    class Peca {
+        +String tipo
+        +int forca
+        +Jogador jogador
+        +Posicao posicao
+        +novoElefante() Peca
+        +novoLeao() Peca
+    }
+    
+    Peca --> Jogador
+    Peca --> Posicao
+```
+### Estrutura GOF
+
+![image](https://github.com/user-attachments/assets/3b7b2bf7-b978-47a1-b60a-979807fc581c)
+
+## Diagrama UML (Padrão)
+``` mermaid
+classDiagram
+    class PecaPrototype {
+        <<interface>>
+        +clonar() PecaPrototype
+        +getTipo() String
+        +getForca() int
+        +setPosicao(Posicao)
+        +setJogador(Jogador)
+        +podeCapturar(PecaPrototype) boolean
+        +movimentoValido(Terreno,Posicao) boolean
+    }
+    
+    class Peca {
+        <<abstract>>
+        -String tipo
+        -int forca
+        -Jogador jogador
+        -Posicao posicao
+        +clonar() PecaPrototype
+        +getTipo() String
+        +getForca() int
+        +setPosicao(Posicao)
+        +setJogador(Jogador)
+    }
+    
+    class Elefante {
+        +Elefante(Elefante)
+    }
+    
+    class Leao {
+        +Leao(Leao)
+    }
+    
+    PecaPrototype <|.. Peca
+    Peca <|-- Elefante
+    Peca <|-- Leao
+    Peca --> Jogador
+    Peca --> Posicao
+ ```
+- **Padrão aplicado no cenário**:
+Com a aplicação do padrão Prototype, cada tipo de peça pode ser criado a partir de um protótipo existente. Isso simplifica a criação de novas peças e reduz a duplicação de código. Por exemplo, ao clonar uma peça existente, todas as suas propriedades são copiadas automaticamente.
+
+## Participante
+- **Prototype (PecaPrototype)** Interface que define o método clonar() para permitir a clonagem de objetos.
+- **ConcretePrototype (Peca):** Classe abstrata que implementa PecaPrototype e fornece a lógica para clonagem e atributos das peças.
+  
+
