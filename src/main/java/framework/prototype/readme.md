@@ -39,7 +39,7 @@ classDiagram
 
 ## Estrutura do padrão (GOF)
 
-![alt text](imageProto.png)
+![alt text](image.png)
 
 
 ## Padrão aplicado no cenário
