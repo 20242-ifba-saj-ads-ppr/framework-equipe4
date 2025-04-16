@@ -1,13 +1,8 @@
-Perfeito! Agora vamos documentar esse trecho do código seguindo exatamente o mesmo modelo que você mostrou, só que agora para o **padrão Factory Method**.
-
----
 
 # Padrão Factory Method
 
 ## Intenção  
 Definir uma interface para criar um objeto, mas deixar as subclasses decidirem qual classe instanciar. O Factory Method permite adiar a instanciação para as subclasses. – `GOF`
-
----
 
 ## Motivação
 
@@ -19,7 +14,7 @@ Ao criar diferentes peças em um jogo, como leões, tigres ou ratos, o código p
 Peca peca = new Leao(new Posicao(0, 0), jogador);
 ```
 
-Esse acoplamento dificulta a manutenção e a extensão, tornando mais difícil mudar o comportamento da criação de peças no futuro, além de quebrar o princípio aberto-fechado (OCP).
+O que acaba dificultando a manutenção e a expansão, tornando mais difícil mudar o comportamento da criação de peças no futuro, além de quebrar o princípio aberto-fechado.
 
 **Diagrama UML (cenário sem o padrão):**
 
@@ -51,16 +46,16 @@ classDiagram
 
 ### Descrição textual
 
-Aplicando o padrão Factory Method no framework, criamos a interface `CriadorPeca`, que define o contrato para a criação de peças. A interface estendida `FactoryMethodCriadorPeca` adiciona suporte para criação de peças com base em um tipo específico (`TipoAnimal`). Isso permite que as subclasses implementem a lógica específica para instanciar peças de forma flexível, encapsulando o processo de criação.
+Aplicando o padrão Factory Method no framework, criamos a interface CriadorPeca, que define o contrato para a criação de peças. A interface estendida FactoryMethodCriadorPeca adiciona suporte para criação de peças com base em um tipo específico TipoAnimal. Isso permite que as subclasses implementem a lógica específica para instanciar peças de forma flexível, encapsulando o processo de criação.
 
----
+
 
 ### Classes envolvidas
 
-- `CriadorPeca` → Interface do método fábrica
-- `FactoryMethodCriadorPeca` → Interface especializada do método fábrica
-- `Peca` → Produto
-- `Posicao`, `Jogador`, `TipoAnimal` → Parâmetros utilizados na criação da peça
+- CriadorPeca → Interface 
+- FactoryMethodCriadorPeca → Interface especializada do método fábrica
+- Peca → Produto
+- Posicao, Jogador, TipoAnimal → Parâmetros utilizados na criação da peça
 
 **Diagrama UML (cenário com o padrão):**
 
@@ -85,14 +80,12 @@ classDiagram
     FactoryMethodCriadorPeca --> Peca
 ```
 
----
-
 ## Participantes
 
-- **Creator (`CriadorPeca`)**: Declara o método de fábrica que retorna objetos do tipo `Peca`.
-- **ConcreteCreator (`FactoryMethodCriadorPeca`)**: Especializa a criação do produto com base em `TipoAnimal`, permitindo maior flexibilidade.
-- **Product (`Peca`)**: Define a interface comum para os objetos que serão criados.
-- **Client**: Usa o método fábrica sem depender de implementações concretas das peças.
+- Creator (CriadorPeca): Declara o método de fábrica que retorna objetos do tipo Peca.
+- ConcreteCreator (FactoryMethodCriadorPeca): Especializa a criação do produto com base em TipoAnimal, permitindo maior flexibilidade.
+- Product (Peca): Define a interface comum para os objetos que serão criados.
+- Client: Usa o método fábrica sem depender de implementações concretas das peças.
 
 ---
 

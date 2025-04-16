@@ -4,7 +4,6 @@
 
 Fornecer uma interface unificada para um conjunto de interfaces em um subsistema. O Facade define uma interface de nível mais alto que torna o subsistema mais fácil de usar. – `GoF`
 
----
 
 ## Motivação
 
@@ -41,28 +40,25 @@ classDiagram
     Cliente --> Peca
 ```
 
----
 
 ### Estrutura do padrão (GoF)
+![alt text](image.png)
 
-![alt text](imageFacade.png)
-
----
 
 ## Padrão aplicado no cenário
 
 ### Descrição textual
 
-Aplicando o padrão Facade ao jogo Selva, criamos uma interface `RegrasJogoFacade` que encapsula a lógica de movimentação, captura e controle de turnos. O cliente, ao invés de lidar com diversas classes diretamente, interage com essa fachada única. Isso reduz o acoplamento, melhora a organização e facilita modificações futuras.
+Ao aplicarmos o padrão Facade ao jogo Selva, criamos uma interface RegrasJogoFacade esta encapsula a lógica de movimentação, captura e controle de turnos. O cliente por sua vez ao invés de lidar com diversas classes diretamente, interage com essa fachada única.Reduzindo o acoplamento, melhorando a organização e facilitando modificações futuras.
 
----
+
 
 ### Classes envolvidas
 
-- `RegrasJogoFacade` **→** Interface Facade
-- `RegrasJogoSelvaFacade` **→** Implementação concreta da fachada
-- `GerenciadorTurnos` **→** Subsistema interno de controle de turnos
-- `Peca`, `Posicao`, `Jogador` **→** Entidades do jogo que participam das regras
+- RegrasJogoFacade **-->** Interface
+- RegrasJogoSelvaFacade **-->** Implementação concreta
+- GerenciadorTurnos **-->** Subsistema interno de controle de turnos
+- Peca, Posicao, Jogador **-->** Entidades do jogo que participam das regras
 
 **Diagrama UML (cenário com o padrão):**
 
@@ -96,16 +92,16 @@ classDiagram
     RegrasJogoSelvaFacade --> GerenciadorTurnos
 ```
 
----
+
 
 ## Participantes
 
-- **Facade (`RegrasJogoFacade`)**: Interface unificada para operações de turno, movimento e regras do jogo.
-- **ConcreteFacade (`RegrasJogoSelvaFacade`)**: Implementação concreta da interface, orquestra as operações internas.
-- **Subsistemas (`GerenciadorTurnos`, `Peca`)**: Componentes internos encapsulados pela fachada.
-- **Cliente**: Interage apenas com a fachada, sem conhecer os detalhes internos.
+- Facade (RegrasJogoFacade): Interface unificada para operações de turno, movimento e regras do jogo.
+- ConcreteFacade (RegrasJogoSelvaFacade): Implementação concreta da interface, orquestra as operações internas.
+- Subsistemas (GerenciadorTurnos, Peca): Componentes internos encapsulados pela fachada.
+- Cliente: Interage apenas com a fachada, sem conhecer os detalhes internos.
 
----
+
 
 ## Código
 
