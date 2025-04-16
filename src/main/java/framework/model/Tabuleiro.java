@@ -14,16 +14,46 @@ public class Tabuleiro {
         }
     }
 
-    public boolean estaDentroDosLimites(int linha, int coluna) {
+    public boolean estaDentroDosLimites(Posicao posicao) {
+        int linha = posicao.getLinha();
+        int coluna = posicao.getColuna();
         return linha >= 0 && linha < grade.length && coluna >= 0 && coluna < grade[0].length;
     }
 
+
+    public void definirCasa(Posicao posicao, String peca) {
+    if (estaDentroDosLimites(posicao)) { 
+        grade[posicao.getLinha()][posicao.getColuna()] = peca;
+    } else {
+        System.out.println("ERRO: A posição indicada está fora dos limites do tabuleiro.");
+    }
+    
+    // consertar
+    // public Peca encontrarPecaPorSimbolo(String simbolo) {
+    //     for (Peca peca : pecasAtivas) {
+    //         if (peca.getSimbolo().equals(simbolo)) {
+    //             return peca;
+    //         }
+    //     }
+    //     return null;
+    // }
+    
+   
+    public Peca obterPecaEm(Posicao posicao) {
+        if (estaDentroDosLimites(posicao)) {
+            String conteudoCasa = grade[posicao.getLinha()] [posicao.getColuna()];
+            if (!conteudoCasa.equals(" ") && !conteudoCasa.equals("~") && !conteudoCasa.equals("o") && !conteudoCasa.equals("#")) {
+                return encontrarPecaPorSimbolo(conteudoCasa);
+            }
+        }
+        return null; 
+    }
     public String[][] getGrade() {
         return grade;
     }
     //consertar
     public Peca getPecaEm(Posicao posicao) {
-        if (!estaDentroDosLimites(posicao.getLinha(), posicao.getColuna())) {        
+        if (!estaDentroDosLimites(posicao)) {        
             return null;
         }
         return null;

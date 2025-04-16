@@ -25,13 +25,13 @@ public class MovimentoPulo implements EstrategiaMovimento {
         Posicao proximaPosicao = new Posicao(posicaoAtual.getLinha() + incrementoLinha, posicaoAtual.getColuna() + incrementoColuna);
 
         // avanca enquanto encontrar agua ("~") no caminho
-        while (tabuleiro.estaDentroDosLimites(proximaPosicao.getLinha(), proximaPosicao.getColuna()) &&
+        while (tabuleiro.estaDentroDosLimites(proximaPosicao) &&
                tabuleiro.getGrade()[proximaPosicao.getLinha()][proximaPosicao.getColuna()].equals("~")) {
             proximaPosicao = new Posicao(proximaPosicao.getLinha() + incrementoLinha, proximaPosicao.getColuna() + incrementoColuna);
         }
 
         // verifica se a próxima posicao e valida
-        if (tabuleiro.estaDentroDosLimites(proximaPosicao.getLinha(), proximaPosicao.getColuna())) {
+        if (tabuleiro.estaDentroDosLimites(proximaPosicao)) {
             String quadradoAlvo = tabuleiro.getGrade()[proximaPosicao.getLinha()][proximaPosicao.getColuna()];
 
             // verifica se o quadrado esta vazio
@@ -40,7 +40,7 @@ public class MovimentoPulo implements EstrategiaMovimento {
                 Posicao posicaoVerificacao = new Posicao(posicaoAtual.getLinha() + incrementoLinha, posicaoAtual.getColuna() + incrementoColuna);
 
                 // verifica tem rato na agua bloqueando o salto
-                while (tabuleiro.estaDentroDosLimites(posicaoVerificacao.getLinha(), posicaoVerificacao.getColuna()) &&
+                while (tabuleiro.estaDentroDosLimites(posicaoVerificacao) &&
                        !posicaoVerificacao.equals(proximaPosicao)) {
                     Peca pecaNoCaminho = tabuleiro.getPecaEm(posicaoVerificacao);
                     if (pecaNoCaminho != null && ((Animal) pecaNoCaminho).getTipoAnimal() == TipoAnimal.RATO) {
