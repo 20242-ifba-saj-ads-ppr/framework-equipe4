@@ -1,13 +1,10 @@
-Claro! Aqui está a documentação completa para o padrão **Prototype**, seguindo exatamente o modelo que você forneceu antes:
 
----
 
 # Padrão Prototype
 
 ## Intenção  
 Especificar os tipos de objetos a serem criados usando uma instância prototípica e criar novos objetos copiando esse protótipo. – `GOF`
 
----
 
 ## Motivação
 
@@ -39,21 +36,17 @@ classDiagram
     Cliente --> Tigre
 ```
 
----
 
 ## Estrutura do padrão (GOF)
 
 ![alt text](imageProto.png)
 
----
 
 ## Padrão aplicado no cenário
 
 ### Descrição textual
 
 Com o padrão Prototype, definimos a interface PecaPrototype, que oferece um método clonar(). Cada peça concreta poderá ser clonada a partir de um protótipo existente, permitindo criar novos objetos com base em um modelo já configurado. Isso reduz o custo de criação e facilita a replicação de peças semelhantes com pequenas variações.
-
----
 
 ### Classes envolvidas
 
@@ -80,8 +73,6 @@ classDiagram
 
     Cliente --> PecaPrototype
 ```
-
----
 
 ## Participantes
 
