@@ -1,10 +1,11 @@
 package builder;
+
 import model.Jogador;
 
-public class ConstrutorJogador implements BuilderJogador{
+public class ConstrutorJogador implements BuilderJogador {
     private Jogador jogador;
-   
-    public ConstrutorJogador(){
+
+    public ConstrutorJogador() {
         this.jogador = new Jogador();
     }
 
@@ -40,6 +41,4 @@ public class ConstrutorJogador implements BuilderJogador{
         return jogador;
     }
 
-}  
-
-
+}
