@@ -149,166 +149,296 @@ public class DiretorJogador {
 COLOCAR
 	
 
-
-# Singleton
+# Padrão Facade
 
 ## Intenção
-Garantir que apenas uma instância das configurações do jogo exista em toda a aplicação, fornecendo um acesso global e consistente a esses dados.
+
+Fornecer uma interface unificada para um conjunto de interfaces em um subsistema. O Facade define uma interface de nível mais alto que torna o subsistema mais fácil de usar. – `GoF`
+
 
 ## Motivação
-Em um jogo, é fundamental que configurações como o tamanho do tabuleiro e o número máximo de jogadores sejam definidas de forma centralizada. Se cada parte do jogo puder ter suas próprias configurações, surgirão inconsistências: um jogador pode estar em um tabuleiro de 7x9 enquanto outro está em um de 10x10, o que tornaria a experiência confusa e cheia de erros.
 
-O padrão Singleton resolve esse problema ao garantir que haja apenas uma instância da configuração do jogo, acessível a todas as partes do sistema. Isso significa que todos compartilham os mesmos valores, e qualquer alteração é refletida em todo o jogo, mantendo a coerência.
+### Cenário sem a aplicação do padrão
 
-Por exemplo, se o tabuleiro é 7x9, mas o sistema de colisões usa um grid de 10x12, isso pode resultar em bugs sérios, como jogadores aparecendo fora do mapa ou habilidades que funcionam em alguns módulos, mas falham em outros.
+Sem o uso do padrão Facade, o código cliente precisa interagir diretamente com diversos componentes internos do jogo, como o controle de turnos, as regras de movimentação e captura. Isso gera um forte acoplamento e maior complexidade no código:
 
-## Cenário sem o Padrão
+```java
+if (peca.podeMover(destino) && regrasJogo.capturaValida(peca, inimigo)) {
+    gerenciadorTurnos.proximoTurno();
+}
+```
+
+Nesse cenário, o cliente precisa conhecer múltiplas classes e suas interações internas, o que torna a manutenção e a extensão do sistema mais difíceis.
+
+**Diagrama UML (cenário sem o padrão):**
+
 ```mermaid
 classDiagram
-    class ConfiguracaoJogo {
-        -int larguraTabuleiro
-        -int alturaTabuleiro
-        -int quantidadeMaximaJogador
-        +getLarguraTabuleiro()
-        +setLarguraTabuleiro()
+    class Cliente {
+        +realizarJogada()
     }
 
-    class Tabuleiro {
-        -ConfiguracaoJogo config
+    class GerenciadorTurnos {
+        +proximoTurno()
+        +getJogadorAtual()
     }
 
-    class Jogador {
-        -ConfiguracaoJogo config
+    class Peca {
+        +podeMover(Posicao destino)
     }
 
-    class MenuOpcoes {
-        -ConfiguracaoJogo config
-    }
-
-    Tabuleiro --> ConfiguracaoJogo
-    Jogador --> ConfiguracaoJogo
-    MenuOpcoes --> ConfiguracaoJogo
+    Cliente --> GerenciadorTurnos
+    Cliente --> Peca
 ```
-## Diagrama UML (Padrão)
-``` mermaid
 
- ```
+
+### Estrutura do padrão (GoF)
+![alt text](image.png)
+
+
 ## Padrão aplicado no cenário
 
-No código fornecido, o padrão Singleton é aplicado para gerenciar as configurações globais do jogo:
+### Descrição textual
 
-- Garante que todas as partes do jogo acessem as mesmas configurações.
-- Centraliza a gestão das configurações.
-- Permite modificações globais quando necessário.
+Ao aplicarmos o padrão Facade ao jogo Selva, criamos uma interface RegrasJogoFacade esta encapsula a lógica de movimentação, captura e controle de turnos. O cliente por sua vez ao invés de lidar com diversas classes diretamente, interage com essa fachada única.Reduzindo o acoplamento, melhorando a organização e facilitando modificações futuras.
+
+
+
+### Classes envolvidas
+
+- RegrasJogoFacade **-->** Interface
+- RegrasJogoSelvaFacade **-->** Implementação concreta
+- GerenciadorTurnos **-->** Subsistema interno de controle de turnos
+- Peca, Posicao, Jogador **-->** Entidades do jogo que participam das regras
+
+**Diagrama UML (cenário com o padrão):**
+
+```mermaid
+classDiagram
+    class RegrasJogoFacade {
+        <<interface>>
+        +movimentoValido(Peca, Posicao): boolean
+        +capturaValida(Peca, Peca): boolean
+        +verificarVencedor(): Jogador
+        +passarTurno()
+        +getJogadorAtual(): Jogador
+    }
+
+    class RegrasJogoSelvaFacade {
+        +movimentoValido(Peca, Posicao): boolean
+        +capturaValida(Peca, Peca): boolean
+        +verificarVencedor(): Jogador
+        +passarTurno()
+        +getJogadorAtual(): Jogador
+    }
+
+    class GerenciadorTurnos {
+        -turnoAtual: int
+        -jogadores: List<Jogador>
+        +proximoTurno()
+        +getJogadorAtual(): Jogador
+    }
+
+    RegrasJogoFacade <|.. RegrasJogoSelvaFacade
+    RegrasJogoSelvaFacade --> GerenciadorTurnos
+```
+
+
 
 ## Participantes
 
-- **Singleton (ConfiguracaoJogo)** - mantém a única instância da classe e fornece acesso global.
-  - Armazena os dados de configuração (quantidadeMaximaJogador, larguraTabuleiro, alturaTabuleiro).
-  - Implementa o método getInstancia() para controle de acesso.
+- Facade (RegrasJogoFacade): Interface unificada para operações de turno, movimento e regras do jogo.
+- ConcreteFacade (RegrasJogoSelvaFacade): Implementação concreta da interface, orquestra as operações internas.
+- Subsistemas (GerenciadorTurnos, Peca): Componentes internos encapsulados pela fachada.
+- Cliente: Interage apenas com a fachada, sem conhecer os detalhes internos.
 
-# Padrão Prototype
-## Intenção
-Permitir a criação de novos objetos através da clonagem de instâncias existentes, evitando a necessidade de subclasses para criação de objetos e fornecendo um mecanismo flexível para criação de objetos complexos.
+
+
+## Código
+
+### Framework
+
+**GerenciadorTurnos.java**
+
+```java
+package framework.facade;
+
+import java.util.List;
+import framework.model.Jogador;
+
+public class GerenciadorTurnos {
+    private int turnoAtual;
+    private List<Jogador> jogadores;
+
+    public GerenciadorTurnos(List<Jogador> jogadores) {
+        if (jogadores == null || jogadores.isEmpty()) {
+            throw new IllegalArgumentException("Lista de jogadores não pode ser vazia");
+        }
+        this.jogadores = jogadores; 
+        this.turnoAtual = 0;
+    }
+
+    public void proximoTurno() {
+        turnoAtual = (turnoAtual + 1) % jogadores.size();
+    }
+
+    public Jogador getJogadorAtual() {
+        return jogadores.get(turnoAtual); 
+    }
+}
+```
+
+**RegrasJogoFacade.java**
+
+```java
+package framework.facade;
+
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.pecas.Peca;
+
+public interface RegrasJogoFacade {
+    boolean movimentoValido(Peca peca, Posicao destino);
+    boolean capturaValida(Peca atacante, Peca defensor);
+    Jogador verificarVencedor();
+    void passarTurno();
+    Jogador getJogadorAtual();
+}
+```
+
+### Código (Jogo): 
+
+COLOCAR
+    
+
+
+# Padrão Factory Method
+
+## Intenção  
+Definir uma interface para criar um objeto, mas deixar as subclasses decidirem qual classe instanciar. O Factory Method permite adiar a instanciação para as subclasses. – `GOF`
 
 ## Motivação
-Em um jogo de tabuleiro na selva, exploradores, animais e armadilhas precisam ser criados dinamicamente. O desafio é permitir a criação de novos tipos de peças sem repetir código ou dificultar a manutenção do jogo.
-A solução está no uso de protótipos: em vez de criar cada peça do zero, o jogo pode clonar um modelo pré-existente. Assim, cada ferramenta do jogo gera novas peças a partir de um protótipo, tornando o código mais flexível.
 
-### Cenário sem o Padrão
-``` mermaid
-classDiagram
-    class Jogador
-    class Posicao
-    class Peca {
-        +String tipo
-        +int forca
-        +Jogador jogador
-        +Posicao posicao
-        +novoElefante() Peca
-        +novoLeao() Peca
-    }
-    
-    Peca --> Jogador
-    Peca --> Posicao
+### Cenário sem a aplicação do padrão
+
+Ao criar diferentes peças em um jogo, como leões, tigres ou ratos, o código pode ficar fortemente acoplado às classes concretas dessas peças:
+
+```java
+Peca peca = new Leao(new Posicao(0, 0), jogador);
 ```
-### Estrutura GOF
 
-![image](https://github.com/user-attachments/assets/3b7b2bf7-b978-47a1-b60a-979807fc581c)
+O que acaba dificultando a manutenção e a expansão, tornando mais difícil mudar o comportamento da criação de peças no futuro, além de quebrar o princípio aberto-fechado.
 
-## Diagrama UML (Padrão)
-``` mermaid
+**Diagrama UML (cenário sem o padrão):**
+
+```mermaid
 classDiagram
-    class PecaPrototype {
-        <<interface>>
-        +clonar() PecaPrototype
-        +getTipo() String
-        +getForca() int
-        +setPosicao(Posicao)
-        +setJogador(Jogador)
-        +podeCapturar(PecaPrototype) boolean
-        +movimentoValido(Terreno,Posicao) boolean
+    class Cliente {
+        +criarPeca()
     }
-    
-    class Peca {
-        <<abstract>>
-        -String tipo
-        -int forca
-        -Jogador jogador
-        -Posicao posicao
-        +clonar() PecaPrototype
-        +getTipo() String
-        +getForca() int
-        +setPosicao(Posicao)
-        +setJogador(Jogador)
-    }
-    
-    class Elefante {
-        +Elefante(Elefante)
-    }
-    
+
     class Leao {
-        +Leao(Leao)
+        +Leao(Posicao posicao, Jogador jogador)
     }
-    
-    PecaPrototype <|.. Peca
-    Peca <|-- Elefante
-    Peca <|-- Leao
-    Peca --> Jogador
-    Peca --> Posicao
- ```
-- Padrão aplicado no cenário:
-Com a aplicação do padrão Prototype, cada tipo de peça pode ser criado a partir de um protótipo existente. Isso simplifica a criação de novas peças e reduz a duplicação de código. Por exemplo, ao clonar uma peça existente, todas as suas propriedades são copiadas automaticamente.
 
-## Participante
-- Prototype (PecaPrototype) Interface que define o método clonar() para permitir a clonagem de objetos.
-- ConcretePrototype (Peca): Classe abstrata que implementa PecaPrototype e fornece a lógica para clonagem e atributos das peças.
+    class Posicao
+    class Jogador
 
+    Cliente --> Leao
+```
 
-# Padrão Facade  
-## Intenção  
+---
 
-Fornecer uma interface unificada para um conjunto de interfaces em um subsistema. O Facade define uma interface de nível mais alto que torna o subsistema mais fácil de ser usado, reduzindo o acoplamento e organizando melhor as interações entre os componentes internos.
+## Estrutura do padrão (GOF)
 
-## Motivação  
-Durante o desenvolvimento do jogo, notamos que várias partes do código interagiam diretamente com regras complexas, como validação de movimentos e verificação de vencedores. Isso tornava o código difícil de ler e manter. Para resolver isso, criamos a RegrasJogoFacade, que centraliza todas as regras do jogo em um único ponto, permitindo chamadas simples e diretas sem expor a lógica interna.  
+![alt text](imageFactory.png)
 
-### Antes do Facade  
-O código precisava interagir diretamente com várias classes diferentes, o que aumentava a complexidade e dificultava futuras modificações.  
+---
+
+## Padrão aplicado no cenário
+
+### Descrição textual
+
+Aplicando o padrão Factory Method no framework, criamos a interface CriadorPeca, que define o contrato para a criação de peças. A interface estendida FactoryMethodCriadorPeca adiciona suporte para criação de peças com base em um tipo específico TipoAnimal. Isso permite que as subclasses implementem a lógica específica para instanciar peças de forma flexível, encapsulando o processo de criação.
 
 
-### Depois do Facade  
-Agora, a RegrasJogoFacade encapsula toda a lógica e expõe apenas os métodos essenciais, como movimentoValido(), capturaValida() e verificarVencedor(). Isso torna o código mais limpo e fácil de manter.  
 
-### Estrutura GOF
+### Classes envolvidas
 
-![alt text](image.png)
+- CriadorPeca → Interface 
+- FactoryMethodCriadorPeca → Interface especializada do método fábrica
+- Peca → Produto
+- Posicao, Jogador, TipoAnimal → Parâmetros utilizados na criação da peça
 
-## Estrutura  
-O Facade no projeto é composto por:  
-- *RegrasJogoFacade (Interface)* → Define os métodos principais.  
-- *RegrasJogoFacadeImpl (Implementação)* → Coordena as chamadas para componentes internos.  
-- *GerenciadorTurnos, Tabuleiro, Peca, Jogador, etc.* → Componentes que lidam com regras específicas acessadas pela Facade.  
+**Diagrama UML (cenário com o padrão):**
 
-  
+```mermaid
+classDiagram
+    class CriadorPeca {
+        <<interface>>
+        +fabricar(Posicao, Jogador): Peca
+    }
+
+    class FactoryMethodCriadorPeca {
+        <<interface>>
+        +fabricar(Posicao, Jogador, TipoAnimal): Peca
+    }
+
+    class Peca
+    class Posicao
+    class Jogador
+    class TipoAnimal
+
+    CriadorPeca <|.. FactoryMethodCriadorPeca
+    FactoryMethodCriadorPeca --> Peca
+```
+
+## Participantes
+
+- Creator (CriadorPeca): Declara o método de fábrica que retorna objetos do tipo Peca.
+- ConcreteCreator (FactoryMethodCriadorPeca): Especializa a criação do produto com base em TipoAnimal, permitindo maior flexibilidade.
+- Product (Peca): Define a interface comum para os objetos que serão criados.
+- Client: Usa o método fábrica sem depender de implementações concretas das peças.
+
+---
+
+### Código (Framework)
+
+**CriadorPeca.java**
+
+```java
+package framework.factoryMethod;
+
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.pecas.Peca;
+
+public interface CriadorPeca {
+    Peca fabricar(Posicao posicao, Jogador jogador);
+}
+```
+
+**FactoryMethodCriadorPeca.java**
+
+```java
+package framework.factoryMethod;
+
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.pecas.Peca;
+import framework.model.pecas.TipoAnimal;
+
+public interface FactoryMethodCriadorPeca extends CriadorPeca {
+    Peca fabricar(Posicao posicao, Jogador jogador, TipoAnimal animal);
+}
+```
+
+---
+
+### Código (Jogo):
+
+COLOCAR
+
+
+
 
