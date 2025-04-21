@@ -1,8 +1,12 @@
 package framework.model;
+
+import framework.model.pecas.Peca;
+
 public class Jogador {
     private String nome;
     private String cor;
     private int pontos;
+    private Peca ultimaPeca = null;
     
     public Jogador() {
         this.nome = "";
@@ -39,4 +43,21 @@ public class Jogador {
         this.pontos = pontos;
     }
     
+
+    public void adicionarPontos(int pontos) {
+        this.pontos += pontos;
+    }
+    
+    public void moverPara(Posicao novaPosicao, Peca peca) {
+        System.out.println(nome + " moveu para " + novaPosicao);
+        this.ultimaPeca = peca;
+        peca.setPosicao(novaPosicao);
+    }
+
+    public void voltarPara(Posicao posicaoAnterior, Peca peca) {
+        System.out.println(nome + " voltou para " + posicaoAnterior);
+        this.ultimaPeca = peca;
+        peca.setPosicao(posicaoAnterior);
+    }
+
 }

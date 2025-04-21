@@ -1,4 +1,7 @@
 package framework.model;
+import java.util.ArrayList;
+
+import framework.Memento.Memento;
 import framework.model.pecas.Peca;
 import jogo.model.Animal;
 
