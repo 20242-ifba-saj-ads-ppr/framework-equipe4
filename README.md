@@ -152,17 +152,13 @@ COLOCAR
 # Padrão Factory Method
 
 ## Intenção  
-Definir uma interface para criar um objeto, mas deixar as subclasses decidirem qual classe instanciar. O Factory Method permite adiar a instanciação para as subclasses. – `GOF`
+Definir uma interface para a criação de peças, permitindo que as subclasses decidam qual peça instanciar. Dessa maneira, a criação das peças ganha flexibilidade.
 
 ## Motivação
 
 ### Cenário sem a aplicação do padrão
 
 Ao criar diferentes peças em um jogo, como leões, tigres ou ratos, o código pode ficar fortemente acoplado às classes concretas dessas peças:
-
-```java
-Peca peca = new Leao(new Posicao(0, 0), jogador);
-```
 
 O que acaba dificultando a manutenção e a expansão, tornando mais difícil mudar o comportamento da criação de peças no futuro, além de quebrar o princípio aberto-fechado.
 
@@ -191,13 +187,6 @@ classDiagram
 ![image](https://github.com/20242-ifba-saj-ads-ppr/framework-equipe4/blob/1820c78e4b0b87f6eef921bfccb0392333f999a6/imagem/imageFactory.png)
 
 ---
-
-## Padrão aplicado no cenário
-
-### Descrição textual
-
-
-
 
 ### Classes envolvidas
 
@@ -233,8 +222,19 @@ classDiagram
 
 - Creator (CriadorPeca): Classe abstrata que define o método factory, deixando para a fábrica a responsabilidade de instanciá-la corretamente.
 - ConcreteCreator (CriadorPecaSelvaConcreto): Implementação concreta de CriadorPeca, especializada na criação de peças do jogo.
-- Product (): 
+- Product (Peca): Define o contrato básico para todas as peças do jogo. Ela garante que todas as peças possam ser tratadas de maneira uniforme, permitindo que o código que manipula as peças seja flexível e extensível.
 - Client: Usa o método fábrica sem depender de implementações concretas das peças.
+  
+## Descrição textual
+
+A interface CriadorPeca é a base para a criação de peças no jogo. Ela define um contrato que todas as classes criadoras de peças devem seguir, garantindo que cada peça seja criada com uma posição (Posicao) e um jogador (Jogador) associados. Essa abstração permite que o processo de criação de peças seja padronizado e desacoplado do restante do código. 
+
+A interface FactoryMethodCriadorPeca estende CriadorPeca e adiciona um novo método fabricar, que inclui um parâmetro adicional: o tipo de animal (TipoAnimal). Essa extensão permite que as peças sejam criadas com características específicas, como força e comportamento, associadas ao tipo de animal correspondente. 
+
+A classe CriadorPecaSelvaConcreto é uma implementação concreta da interface FactoryMethodCriadorPeca. Ela é responsável por criar peças específicas para o jogo Selva. O método fabricar(Posicao posicao, Jogador jogador) lança uma exceção caso seja chamado, pois exige que o tipo de animal seja especificado. Já o método fabricar(Posicao posicao, Jogador jogador, TipoAnimal tipoAnimal) cria uma instância da classe Animal, que representa uma peça do jogo com atributos como nome, força, jogador e posição. 
+ 
+Se novas peças precisarem ser introduzidas no jogo, basta adicionar essas peças à fábrica, mantendo o restante do código desacoplado e organizado.
+
 
 ---
 
@@ -268,7 +268,30 @@ public interface FactoryMethodCriadorPeca extends CriadorPeca {
     Peca fabricar(Posicao posicao, Jogador jogador, TipoAnimal animal);
 }
 ```
+**CriadorPecaSelvaConcreto.java**
+```java
+package jogo.factorymethod;
 
+import framework.factoryMethod.FactoryMethodCriadorPeca;
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.pecas.Peca;
+import framework.model.pecas.TipoAnimal;
+import jogo.model.Animal;
+
+public class CriadorPecaSelvaConcreto implements FactoryMethodCriadorPeca {
+
+    @Override
+    public Peca fabricar(Posicao posicao, Jogador jogador) {
+        throw new UnsupportedOperationException("Método 'fabrica' não implementado: Parâmetros incorretos, é necessário definir o tipo do animal.");
+    }
+
+    @Override
+    public Peca fabricar(Posicao posicao, Jogador jogador, TipoAnimal tipoAnimal) {
+        return new Animal(tipoAnimal.toString(), tipoAnimal.getForca(), jogador, posicao);
+    }
+}
+```
 ---
 
 ### Código (Jogo):
