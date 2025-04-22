@@ -543,3 +543,128 @@ public interface PecaPrototype extends Cloneable {
 ### Código (Jogo):
 
 COLOCAR
+
+
+# Padrão Memento
+
+## Intenção 
+Sem violar o encapsulamento, salvar e carregar um estado interno de um objeto, de maneira que o objeto possa ser restaurado para esse estado mais tarde.
+
+## Motivação
+No jogo, salvar e restaurar o estado do tabuleiro (como as peças e o jogador atual) exigiria expor detalhes internos do Tabuleiro para outras classes, violando o encapsulamento. Além disso, gerenciar múltiplos estados salvos de forma manual seria confuso, propenso a erros e dificultaria implementar funcionalidades como "desfazer" ou "refazer". O padrão Memento resolve esses problemas ao permitir que o Tabuleiro crie um objeto Memento para armazenar seu estado interno de forma segura e protegida. O Caretaker assume a responsabilidade de gerenciar os estados salvos, organizando-os em uma pilha. Dessa forma, o Tabuleiro mantém total controle sobre seu estado, enquanto o Caretaker simplifica o gerenciamento de múltiplos estados.
+
+### Cenário sem a aplicação do padrão
+```mermaid
+classDiagram
+    class Tabuleiro {
+        - pecas: List~String~
+        - jogadorAtual: Jogador
+        + adicionarPeca(peca: String): void
+        + setJogadorAtual(jogador: Jogador): void
+        + salvarEstado(): Object[]
+        + restaurarEstado(estado: Object[]): void
+    }
+
+    class Jogador {
+        - nome: String
+        - pontos: int
+        + adicionarPontos(pontos: int): void
+    }
+
+    class JogoSelva {
+        - tabuleiro: Tabuleiro
+        - historicoEstados: Stack~Object[]~
+        + jogar(): void
+        + desfazer(): void
+    }
+
+    Tabuleiro  -- Jogador : jogadorAtual
+    JogoSelva  -- Tabuleiro : tabuleiro
+```
+
+## Estrutura do padrão (GOF)
+![image](https://github.com/user-attachments/assets/7e00245e-1e2a-4196-a9c1-af4f8cd4c071)
+
+## Padrão aplicado no cenário
+```mermaid
+classDiagram
+    class Memento {
+        -estadoTabuleiro: List~String~
+        -jogadorAtual: Jogador
+        +Memento(estadoTabuleiro: List~String~, jogadorAtual: Jogador)
+        +getEstadoTabuleiro() List~String~
+        +getJogadorAtual() Jogador
+    }
+
+    class Caretaker {
+        -historicoEstados: Stack~Memento~
+        +Caretaker()
+        +salvarEstado(memento: Memento) void
+        +desfazerEstado() Memento
+    }
+
+    Memento  --  Caretaker
+```
+## Participantes
+- Originator(Tabuleiro): A classe que cria o memento e restaura o seu estado a partir dele.
+- Memento (Memento):  A classe que armazena o estado do objeto originador. Ela contém os dados necessários para restaurar o estado do jogo.
+- Caretaker (Caretaker): A classe que gerencia os mementos e mantém o histórico dos estados.
+  
+### Descrição textual
+     
+### Código (Framework)
+**Memento.java**
+
+``` java
+package framework.Memento;
+
+import java.util.ArrayList;
+import java.util.List;
+import framework.model.Jogador;
+
+public class Memento {
+    private final List<String> estadoTabuleiro;
+    private final Jogador jogadorAtual;
+
+    public Memento(List<String> estadoTabuleiro, Jogador jogadorAtual) {
+        this.estadoTabuleiro = new ArrayList<>(estadoTabuleiro);
+        this.jogadorAtual = jogadorAtual;
+    }
+
+    public List<String> getEstadoTabuleiro() {
+        return new ArrayList<>(estadoTabuleiro); // Retorna uma cópia para evitar alterações externas
+    }
+
+    public Jogador getJogadorAtual() {
+        return jogadorAtual;
+    }
+}
+```
+
+**Caretaker.java**
+``` java
+package framework.Memento;
+
+import java.util.Stack;
+
+public class Caretaker {
+    private final Stack<Memento> historicoEstados;
+
+    public Caretaker() {
+        this.historicoEstados = new Stack<>();
+    }
+
+    public void salvarEstado(Memento memento) {
+        historicoEstados.push(memento);
+    }
+
+    public Memento desfazerEstado() {
+        if (!historicoEstados.isEmpty()) {
+            return historicoEstados.pop();
+        }
+        throw new IllegalStateException("Não há estados salvos para desfazer.");
+    }
+}
+``` 
+
+```
