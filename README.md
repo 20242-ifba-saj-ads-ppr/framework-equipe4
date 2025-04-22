@@ -682,6 +682,7 @@ public class GerenciadorTurnos {
     }
 }
 ```
+
 # Padrão Command
 ## Intenção
 Controlar as chamadas a um determinado componente, no contexto desse framework, a movimentação, modelando cada requisição como um objeto. Permitir que as operações possam ser desfeitas, enfileiradas ou registradas.
@@ -691,7 +692,22 @@ Ao desenvolver um framework para jogos de tabuleiro, como o jogo Selva, surgiu a
 
 ### Cenário sem a aplicação do padrão
 ```mermaid
+classDiagram
+    class Jogador {
+        -nome: String
+        -historicoMovimentos: Stack~Posicao~
+        -historicoDesfazer: Stack~Posicao~
+        +moverPara(novaPosicao: Posicao)
+        +desfazer()
+        +refazer()
+    }
 
+    class Posicao {
+        -x: int
+        -y: int
+    }
+
+    Jogador --> Posicao
 ```
 
 ## Estrutura do padrão (GOF)
@@ -701,6 +717,10 @@ Ao desenvolver um framework para jogos de tabuleiro, como o jogo Selva, surgiu a
 
 ```
 ## Participantes
+- Command (Command): Define a interface comum para todos os comandos, com os métodos execute, undo e redo.
+- ConcreteCommand (MoverCommand): Implementa os comandos execute, executar e desfazer, referenciando o Jogador e Peca.
+- Receiver (Jogador e Peca): Realiza as operações reais que o comando abstrai.
+- Invoker (GerenciadorComandos): Armazena e executa os comandos. Ele chama o executar() no comando e mantém uma lista para desfazer as ações.
 
  
 ### Descrição textual
@@ -778,7 +798,16 @@ classDiagram
 - Caretaker (Caretaker): A classe que gerencia os mementos e mantém o histórico dos estados.
   
 ### Descrição textual
-     
+O padrão de projeto Memento é utilizado para salvar e carregar o estado do jogo. No nosso framework, a classe Memento armazena o estado do tabuleiro em um momento específico. Esta classe contém duas informações principais: o estado atual do tabuleiro, representado por uma lista de peças (List<String>), e uma lista de objetos do tipo Jogador, que representam as peças ativas do jogo.
+
+Ao usar o Memento, o jogo pode reverter para um estado anterior, oferecendo ao jogador a possibilidade de desfazer movimentos ou recuperar estados anteriores em caso de erro.
+
+Por outro lado, a classe Caretaker atua como um guardião dos objetos Memento. Sua função principal é gerenciar os estados salvos, permitindo que o jogo salve e carregue seu estado de maneira eficiente. No contexto desse framework, o Caretaker armazena múltiplos estados do jogo em uma pilha (Stack<Memento>), permitindo que o jogador restaure o jogo ao último estado salvo ou a um estado anterior, se necessário.
+
+A interação entre o Tabuleiro, Memento e Caretaker é essencial para a experiência do jogador. Quando um jogador precisar salvar o jogo, ele pode chamar o método salvarEstado, que cria um novo Memento contendo o estado atual do tabuleiro(peças e jogador ativo) e o armazena no Caretaker.
+
+Se o jogador deseja reverter sua última jogada, ele pode usar o método restaurarEstado, que recupera o último Memento armazenado e restaura o estado do tabuleiro. Assim, o jogo consegue manter a continuidade da partida, permitindo que os jogadores experimentem diferentes estratégias e jogadas sem o medo de perder o progresso realizado.
+
 ### Código (Framework)
 **Memento.java**
 
