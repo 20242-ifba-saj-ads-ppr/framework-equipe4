@@ -1,4 +1,4 @@
-
+ 
 
 # Padrão Builder
 
@@ -682,5 +682,5 @@ public class Caretaker {
 
 
 
-#Referências
+# Referências
 GAMMA, Erich. et al. Padrões de projetos: Soluções reutilizáveis de software orientados a objetos Bookman editora, 2009.
