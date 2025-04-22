@@ -545,6 +545,16 @@ public interface PecaPrototype extends Cloneable {
 COLOCAR
 
 
+# Padrão State
+## Intencao
+Permite a um objeto alterar seu comportamento quando o seu estado interno muda. No contexto desse framework, o comportamento da movimentação de peças será alterado para só permitir que a peça do jogador atual seja movida.
+
+## Motivação
+
+## Estrutura do padrão (GOF)
+![image](https://github.com/user-attachments/assets/f08f65f2-6a44-4316-ba9d-3c3810a970e2)
+
+
 # Padrão Memento
 
 ## Intenção 
