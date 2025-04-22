@@ -546,13 +546,120 @@ COLOCAR
 
 
 # Padrão State
-## Intencao
+
+## Intenção
 Permite a um objeto alterar seu comportamento quando o seu estado interno muda. No contexto desse framework, o comportamento da movimentação de peças será alterado para só permitir que a peça do jogador atual seja movida.
 
 ## Motivação
+Em jogos de turno, é necessário controlar qual jogador pode executar ações em determinado momento. Usar estruturas condicionais (if, switch) espalhadas pelo código para verificar o jogador atual torna o sistema rígido e difícil de manter. Com o padrão State, encapsulamos os comportamentos de cada estado em classes específicas, permitindo que o jogo altere dinamicamente seu comportamento ao mudar o estado atual.
+
+### Cenário sem a aplicação do padrão
+```mermaid
+classDiagram
+    class JogoSelva {
+        - jogadorAtual: Jogador
+        + moverPeca(jogador: Jogador): void
+    }
+
+    class Jogador {
+        - nome: String
+        + getNome(): String
+    }
+
+    JogoSelva -- Jogador
+```
 
 ## Estrutura do padrão (GOF)
 ![image](https://github.com/user-attachments/assets/f08f65f2-6a44-4316-ba9d-3c3810a970e2)
+
+## Padrão aplicado no cenário
+```mermaid
+classDiagram
+    class EstadoTurno {
+        <<interface>>
+        +podeMover(jogador: Jogador): boolean
+    }
+
+    class TurnoJogador1 {
+        +podeMover(jogador: Jogador): boolean
+    }
+
+    class TurnoJogador2 {
+        +podeMover(jogador: Jogador): boolean
+    }
+
+    class GerenciadorTurnos {
+        -estadoAtual: EstadoTurno
+        +podeMover(jogador: Jogador): boolean
+        +trocarTurno(): void
+    }
+
+    EstadoTurno <|.. TurnoJogador1
+    EstadoTurno <|.. TurnoJogador2
+    GerenciadorTurnos --> EstadoTurno
+```
+
+## Participantes
+- **Context (GerenciadorTurnos):** Armazena a referência para o estado atual e delega a ele o comportamento.
+- **State (EstadoTurno):** Interface comum para todos os estados que define o comportamento esperado.
+- **ConcreteStates (TurnoJogador1, TurnoJogador2):** Implementam o comportamento específico de cada estado.
+
+### Descrição textual
+O GerenciadorTurnos mantém um estadoAtual, que define qual jogador está ativo.
+Quando um jogador tenta mover uma peça, o método podeMover(jogador) do estado atual decide se ele pode ou não jogar.
+Ao fim de uma jogada válida, o método trocarTurno() altera o estado atual para o outro jogador.
+
+### Código (Framework)
+
+**EstadoTurno.java**
+```java
+public interface EstadoTurno {
+    boolean podeMover(Jogador jogador);
+}
+```
+
+**TurnoJogador1.java**
+```java
+public class TurnoJogador1 implements EstadoTurno {
+    @Override
+    public boolean podeMover(Jogador jogador) {
+        return jogador.getId() == 1;
+    }
+}
+```
+
+**TurnoJogador2.java**
+```java
+public class TurnoJogador2 implements EstadoTurno {
+    @Override
+    public boolean podeMover(Jogador jogador) {
+        return jogador.getId() == 2;
+    }
+}
+```
+
+**GerenciadorTurnos.java**
+```java
+public class GerenciadorTurnos {
+    private EstadoTurno estadoAtual;
+
+    public GerenciadorTurnos() {
+        this.estadoAtual = new TurnoJogador1();
+    }
+
+    public boolean podeMover(Jogador jogador) {
+        return estadoAtual.podeMover(jogador);
+    }
+
+    public void trocarTurno() {
+        if (estadoAtual instanceof TurnoJogador1) {
+            estadoAtual = new TurnoJogador2();
+        } else {
+            estadoAtual = new TurnoJogador1();
+        }
+    }
+}
+```
 
 
 # Padrão Memento
