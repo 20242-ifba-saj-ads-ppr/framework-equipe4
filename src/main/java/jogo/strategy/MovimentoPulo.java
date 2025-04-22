@@ -1,6 +1,8 @@
 package jogo.strategy;
 
 import framework.model.Tabuleiro;
+import framework.model.Terreno;
+import framework.model.TipoTerrenoEnum;
 import framework.model.Posicao;
 import framework.model.pecas.Peca;
 import framework.model.pecas.TipoAnimal;
@@ -25,14 +27,14 @@ public class MovimentoPulo implements EstrategiaMovimento {
         Posicao proximaPosicao = new Posicao(posicaoAtual.getLinha() + incrementoLinha, posicaoAtual.getColuna() + incrementoColuna);
 
         // avanca enquanto encontrar agua ("~") no caminho
-        while (tabuleiro.estaDentroDosLimites(proximaPosicao) &&
-               tabuleiro.getGrade()[proximaPosicao.getLinha()][proximaPosicao.getColuna()].equals("~")) {
+        while (tabuleiro.estaDentroDosLimites(proximaPosicao) && tabuleiro.obterTerrenoEm(proximaPosicao).getTipoTerreno() == TipoTerrenoEnum.AGUA) {
             proximaPosicao = new Posicao(proximaPosicao.getLinha() + incrementoLinha, proximaPosicao.getColuna() + incrementoColuna);
         }
 
         // verifica se a próxima posicao e valida
         if (tabuleiro.estaDentroDosLimites(proximaPosicao)) {
-            String quadradoAlvo = tabuleiro.getGrade()[proximaPosicao.getLinha()][proximaPosicao.getColuna()];
+            Terreno terrenoAlvo = tabuleiro.obterTerrenoEm(proximaPosicao);
+            String quadradoAlvo = terrenoAlvo.getTipoTerreno().toString();
 
             // verifica se o quadrado esta vazio
             if (quadradoAlvo.equals(" ")) {

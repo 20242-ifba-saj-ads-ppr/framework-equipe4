@@ -1,34 +1,24 @@
 package framework.model;
-import java.util.ArrayList;
 
-import framework.Memento.Memento;
+import framework.adapter.TabuleiroAdapter;
 import framework.model.pecas.Peca;
 import jogo.model.Animal;
 
 public class Tabuleiro {
-    private String[][] grade;
+    private TabuleiroAdapter adapter;
 
-    public Tabuleiro(int linhas, int colunas) {
-        grade = new String[linhas][colunas];
-        for (int i = 0; i < linhas; i++) {
-            for (int j = 0; j < colunas; j++) {
-                grade[i][j] = " ";
-            }
-        }
-    }
+    public Tabuleiro(TabuleiroAdapter adapter) {
+        this.adapter = adapter;
+    }   
+
 
     public boolean estaDentroDosLimites(Posicao posicao) {
-        int linha = posicao.getLinha();
-        int coluna = posicao.getColuna();
-        return linha >= 0 && linha < grade.length && coluna >= 0 && coluna < grade[0].length;
+        return adapter.estaDentroDosLimites(posicao);
     }
 
 
     public void definirCasa(Posicao posicao, String peca) {
-    if (estaDentroDosLimites(posicao)) { 
-        grade[posicao.getLinha()][posicao.getColuna()] = peca;
-    } else {
-        System.out.println("ERRO: A posição indicada está fora dos limites do tabuleiro.");
+        adapter.definirCasa(posicao, peca);
     }
     
     // consertar
@@ -43,24 +33,15 @@ public class Tabuleiro {
     
    
     public Peca obterPecaEm(Posicao posicao) {
-        if (estaDentroDosLimites(posicao)) {
-            String conteudoCasa = grade[posicao.getLinha()] [posicao.getColuna()];
-            if (!conteudoCasa.equals(" ") && !conteudoCasa.equals("~") && !conteudoCasa.equals("o") && !conteudoCasa.equals("#")) {
-                return encontrarPecaPorSimbolo(conteudoCasa);
-            }
-        }
-        return null; 
+        return adapter.obterPecaEm(posicao);
     }
-    public String[][] getGrade() {
-        return grade;
+   
+  
+    public Terreno obterTerrenoEm(Posicao posicao) {
+        return adapter.obterTerrenoEm(posicao);
+
     }
-    //consertar
-    public Peca getPecaEm(Posicao posicao) {
-        if (!estaDentroDosLimites(posicao)) {        
-            return null;
-        }
-        return null;
-    }
+
 
     public void moverPeca(Animal animal, Posicao posicaoAtual, Posicao proximaPosicao) {
         // TODO Auto-generated method stub

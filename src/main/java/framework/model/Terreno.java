@@ -1,9 +1,16 @@
 package framework.model;
 
+import framework.model.pecas.Peca;
+
 public class Terreno {
     private int linhas;
     private int colunas;
     private TipoTerrenoEnum tipoTerreno;
+    private Peca peca;
+
+    public Peca getPeca() {
+        return peca;
+    }
 
     public Terreno(int linhas, int colunas, TipoTerrenoEnum tipoTerreno) {
         this.linhas = linhas;
@@ -34,6 +41,7 @@ public class Terreno {
     public void setTipoTerreno(TipoTerrenoEnum tipoTerreno) {
         this.tipoTerreno = tipoTerreno;
     }
+
     
 }
 

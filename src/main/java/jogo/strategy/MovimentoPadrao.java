@@ -21,7 +21,8 @@ public class MovimentoPadrao implements EstrategiaMovimento {
             return false;
         }
 
-        String simboloAlvo = tabuleiro.getGrade()[posicaoDestino.getLinha()][posicaoDestino.getColuna()];
+        // Obtém o símbolo do terreno na posição de destino
+        String simboloAlvo = tabuleiro.obterTerrenoEm(posicaoDestino).getTipoTerreno().toString();
 
         // verifica se o alvo é água ("~"), onde peças não podem entrar
         if (simboloAlvo.equals("~")) {
