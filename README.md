@@ -623,8 +623,8 @@ classDiagram
 
 ## Participantes
 - **Context (GerenciadorTurnos):** Armazena a referência para o estado atual e delega a ele o comportamento.
-- **State (EstadoTurno):** Interface comum para todos os estados que define o comportamento esperado.
-- **ConcreteStates (TurnoJogador1, TurnoJogador2):** Implementam o comportamento específico de cada estado.
+- **State (EstadoTurno):** Define uma interface para encapsulamento comum para todos os estados.
+- **ConcreteStates (TurnoJogador1, TurnoJogador2):** Implementa o comportamento específico para cada um dos jogadores, garantindo que cada jogador consiga mover apenas as suas peças.
 
 ### Descrição textual
 O GerenciadorTurnos mantém um estadoAtual, que define qual jogador está ativo.
