@@ -714,7 +714,51 @@ classDiagram
 
 ## Padrão aplicado no cenário
 ```mermaid
+classDiagram
+    class Comando {
+        <<interface>>
+        +executar()
+        +desfazer()
+    }
 
+    class MoverComando {
+        -jogador: Jogador
+        -novaPosicao: Posicao
+        -posicaoAnterior: Posicao
+        -peca: Peca
+        +executar()
+        +desfazer()
+    }
+
+    class GerenciadorComandos {
+        -historicoExecucao: Stack~Comando~
+        -historicoDesfazer: Stack~Comando~
+        +executarComando(comando: Comando)
+        +desfazer()
+        +refazer()
+    }
+
+    class Jogador {
+        -nome: String
+        +moverPara(novaPosicao: Posicao, peca: Peca)
+        +voltarPara(posicaoAnterior: Posicao, peca: Peca)
+    }
+
+    class Peca {
+        -posicao: Posicao
+        +getPosicao(): Posicao
+    }
+
+    class Posicao {
+        -linha: int
+        -coluna: int
+    }
+
+    Comando <|-- MoverComando
+    GerenciadorComandos  -- Comando
+    MoverComando --> Jogador : invoca
+    MoverComando --> Peca : manipula
+    Peca --> Posicao : possui
 ```
 ## Participantes
 - Command (Command): Define a interface comum para todos os comandos, com os métodos execute, undo e redo.
@@ -732,6 +776,98 @@ O GerenciadorComandos atua como o invoker, utilizando uma pilha para gerenciar a
 
 Com essa arquitetura, o jogo consegue facilmente reverter um movimento incorreto ou aplicar o conceito de redo para refazer uma jogada desfeita, o que melhora a experiência de usabilidade e a organização do código.
 
+### Código (Framework)
+**Command.java**
+
+``` java
+package framework.command;
+
+public interface Command {
+    void executar();
+    void desfazer(); 
+}
+```
+**MoverCommand.java**
+``` java
+package framework.command;
+
+import framework.facade.GerenciadorTurnos;
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.pecas.Peca;
+
+public class MoverCommand implements Command {
+    private final Jogador jogador;
+    private final Posicao novaPosicao;
+    private Posicao posicaoAnterior;
+    private final Peca peca;
+    private final GerenciadorTurnos gerenciadorTurnos;
+
+    public MoverCommand(Jogador jogador, Posicao novaPosicao, Peca peca, GerenciadorTurnos gerenciadorTurnos) {
+        this.jogador = jogador;
+        this.novaPosicao = novaPosicao;
+        this.peca = peca;
+        this.gerenciadorTurnos = gerenciadorTurnos;
+    }
+
+    @Override
+    public void executar() {
+        if (!gerenciadorTurnos.podeMover(jogador)) {
+            System.out.println("Não é o turno desse jogador!");
+            return;
+        }
+
+        this.posicaoAnterior = peca.getPosicao(); // Salva a posição atual antes de mover
+        jogador.moverPara(novaPosicao, peca);     // Move a peça
+        gerenciadorTurnos.proximoTurno();         // Avança para o próximo turno
+    }
+
+    @Override
+    public void desfazer() {
+        jogador.voltarPara(posicaoAnterior, peca); // Retorna à posição anterior
+    }
+}
+```
+
+**GerenciadorComandos.java**
+
+``` java
+package framework.command;
+
+import java.util.Stack;
+
+public class GerenciadorComandos {
+    private Stack<Command> historicoExecucao = new Stack<>();
+    private Stack<Command> historicoDesfazer = new Stack<>();
+
+    public void executarComando(Command comando) {
+        comando.executar();
+        historicoExecucao.push(comando); // Adiciona ao histórico de execução
+        historicoDesfazer.clear();       // Limpa o histórico de refazer
+    }
+
+    public void desfazer() {
+        if (!historicoExecucao.isEmpty()) {
+            Command comando = historicoExecucao.pop();
+            comando.desfazer();
+            historicoDesfazer.push(comando); // Adiciona ao histórico de refazer
+        } else {
+            System.out.println("Nada para desfazer.");
+        }
+    }
+
+    public void refazer() {
+        if (!historicoDesfazer.isEmpty()) {
+            Command comando = historicoDesfazer.pop();
+            comando.executar();
+            historicoExecucao.push(comando); // Adiciona novamente ao histórico de execução
+        } else {
+            System.out.println("Nada para refazer.");
+        }
+    }
+}
+
+``` 
 # Padrão Memento
 
 ## Intenção 
