@@ -39,7 +39,7 @@ classDiagram
 
 ### Estrutura do padrão (GOF)
 
-![alt text](imagebuilder.png)
+![image](https://github.com/20242-ifba-saj-ads-ppr/framework-equipe4/blob/1820c78e4b0b87f6eef921bfccb0392333f999a6/imagem/imagebuilder.png)
 
 ### Padrão aplicado no cenário
 
@@ -193,7 +193,7 @@ classDiagram
 
 
 ### Estrutura do padrão (GoF)
-![alt text](image.png)
+![image](https://github.com/20242-ifba-saj-ads-ppr/framework-equipe4/blob/1820c78e4b0b87f6eef921bfccb0392333f999a6/imagem/imageFacade.png)
 
 
 ## Padrão aplicado no cenário
@@ -351,7 +351,7 @@ classDiagram
 
 ## Estrutura do padrão (GOF)
 
-![alt text](imageFactory.png)
+![image](https://github.com/20242-ifba-saj-ads-ppr/framework-equipe4/blob/1820c78e4b0b87f6eef921bfccb0392333f999a6/imagem/imageFactory.png)
 
 ---
 
@@ -479,7 +479,7 @@ classDiagram
 
 ## Estrutura do padrão (GOF)
 
-![alt text](image.png)
+![image](https://github.com/20242-ifba-saj-ads-ppr/framework-equipe4/blob/1820c78e4b0b87f6eef921bfccb0392333f999a6/imagem/imageProto.png)
 
 
 ## Padrão aplicado no cenário
