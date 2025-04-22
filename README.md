@@ -677,4 +677,10 @@ public class Caretaker {
 }
 ``` 
 
-```
+# Construindo um Novo Jogo
+## Passo a Passo para utilização do Framework
+
+
+
+#Referências
+GAMMA, Erich. et al. Padrões de projetos: Soluções reutilizáveis de software orientados a objetos Bookman editora, 2009.
