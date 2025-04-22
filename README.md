@@ -232,8 +232,8 @@ classDiagram
 ## Participantes
 
 - Creator (CriadorPeca): Classe abstrata que define o método factory, deixando para a fábrica a responsabilidade de instanciá-la corretamente.
-- ConcreteCreator (FactoryMethodCriadorPeca): Especializa a criação do produto com base em TipoAnimal, permitindo maior flexibilidade.
-- Product (Peca): Define a interface comum para os objetos que serão criados.
+- ConcreteCreator (CriadorPecaSelvaConcreto): Implementação concreta de CriadorPeca, especializada na criação de peças do jogo.
+- Product (): 
 - Client: Usa o método fábrica sem depender de implementações concretas das peças.
 
 ---
