@@ -863,17 +863,110 @@ public interface RegrasJogoFacade {
 COLOCAR
 
 ## 8. Adapter
+
 ### intenção
 Converter a interface de uma classe em outra interface, esperada pelos clientes. O
-Adapter permite que classes com interfaces incompatíveis trabalhem em conjunto –
-o que, de outra forma, seria impossível.
+Adapter permite que classes com interfaces incompatíveis trabalhem em conjunto, o que, de outra forma, seria impossível.
 
 ### Motivação
+No processo de criação de jogos, diversas versões de tabuleiro (como Selva ou Damas) podem apresentar variações na maneira como lidam com terrenos, fronteiras e peças.  Em vez de adaptar a lógica do jogo para cada tipo de tabuleiro, desenvolvemos um Adapter que proporciona uma interface unificada. Assim, o jogo se relaciona com o TabuleiroAdapter, sem se ater às especificidades de cada tabuleiro em particular. isso incentiva a reutilização de código, o desapego e a incorporação de novos tipos de tabuleiros no framework.
 
 ### Cenário sem a aplicação do padrão
+**Diagrama UML (sem o padrão):**
+
+```mermaid
+classDiagram
+    class Jogo {
+        -tabuleiro: SelvaTabuleiro
+        +executarTurno(): void
+    }
+
+    class SelvaTabuleiro {
+        +getDescricaoTerreno(Posicao): String
+        +obterPecaEm(Posicao): Peca
+        ...
+    }
+
+    Jogo --> SelvaTabuleiro
+```
 
 ### Estrutura do padrão (GOF)
 ![image](https://github.com/user-attachments/assets/f0dd9d9e-3676-4e67-8fbe-805ff1ce832f)
+
+**Diagrama UML (com o padrão):**
+
+```mermaid
+classDiagram
+    class TabuleiroAdapter {
+        <<interface>>
+        +getDescricaoTerreno(posicao: Posicao): String
+        +estaDentroDosLimites(posicao: Posicao): boolean
+        +definirCasa(posicao: Posicao, peca: Peca): void
+        +obterPecaEm(posicao: Posicao): Peca
+        +obterTerrenoEm(posicao: Posicao): Terreno
+        +inicializaTerrenoPecas(jogadores: List~Jogador~): void
+    }
+
+    class TabuleiroSelvaAdapter {
+        -tabuleiro: SelvaTabuleiro
+        +getDescricaoTerreno(posicao): String
+        +estaDentroDosLimites(posicao): boolean
+        ...
+    }
+
+    class SelvaTabuleiro {
+        +getDescricaoTerreno(...)
+        +obterPeca(...)
+        +estaDentroDoLimite(...)
+        ...
+    }
+
+    TabuleiroAdapter <|.. TabuleiroSelvaAdapter
+    TabuleiroSelvaAdapter --> SelvaTabuleiro
+```
+
+---
+
+### Participantes
+
+- **Target (TabuleiroAdapter):** Interface esperada pelo código cliente.
+- **Adapter (TabuleiroSelvaAdapter):** Adapta a interface do tabuleiro real para a interface esperada.
+- **Adaptee (SelvaTabuleiro):** Classe existente com uma interface original e específica.
+- **Client (Lógica do jogo):** Usa o TabuleiroAdapter para interagir com qualquer tipo de tabuleiro.
+
+---
+
+### Descrição textual
+
+A interface TabuleiroAdapter estabelece os procedimentos esperados pelo framework para manipular o tabuleiro do jogo, como a obtenção de peças, a verificação de terrenos ou a verificação de fronteiras.  Isso possibilita que o framework permaneça genérico, operando com qualquer plataforma que possua essa interface.
+ 
+ O adapter é uma implementação tangível da classe TabuleiroSelvaAdapter.  Ela tem uma representação do SelvaTabuleiro e converte cada chamada à interface prevista (TabuleiroAdapter) para as operações efetivas do SelvaTabuleiro.  Este procedimento de tradução garante que o restante do código opere sem alterações, independentemente da variação na estrutura do tabuleiro entre os jogos.
+
+---
+
+### Código (Framework)
+
+**TabuleiroAdapter.java**
+```java
+package framework.adapter;
+
+import java.util.List;
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.Terreno;
+import framework.model.pecas.Peca;
+
+public interface TabuleiroAdapter {
+    String getDescricaoTerreno(Posicao posicao);
+    boolean estaDentroDosLimites(Posicao posicao);
+    void definirCasa(Posicao posicao, Peca peca);
+    Peca obterPecaEm(Posicao posicao);
+    Terreno obterTerrenoEm(Posicao posicao);
+    void inicializaTerrenoPecas(List<Jogador> jogadores);
+}
+```
+
+### Código (Jogo)
 
 
 # Padrões Comportamentais
