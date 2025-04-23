@@ -442,7 +442,10 @@ public class CriadorPecaSelvaConcreto implements FactoryMethodCriadorPeca {
 ---
 
 ### Código (Jogo)
-**ConstrutorJogador.java**
+**CriadorPeça.java**
+```java
+```
+**Factory.java**
 ```java
 ```
 
