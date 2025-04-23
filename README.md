@@ -40,7 +40,7 @@ Para resolver isso, adotamos o padrão Builder . Ele organiza a construção do 
 
 ### Estrutura do padrão (GOF)
 
-![image](https://github.com/20242-ifba-saj-ads-ppr/framework-equipe4/blob/1820c78e4b0b87f6eef921bfccb0392333f999a6/imagem/imagebuilder.png)
+![image](https://github.com/user-attachments/assets/9ce0210e-a464-4590-a835-0b1ed1faaa55)
 
 
 **Diagrama UML (cenário com o padrão):**
