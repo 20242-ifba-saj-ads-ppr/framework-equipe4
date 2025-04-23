@@ -3,9 +3,9 @@ package jogo.strategy;
 import framework.model.Posicao;
 import framework.model.Tabuleiro;
 import framework.model.pecas.Peca;
+import framework.model.pecas.TipoAnimal;
 import framework.strategy.EstrategiaMovimento;
 import jogo.model.Animal;
-import framework.model.pecas.TipoAnimal;
 
 public class MovimentoRato implements EstrategiaMovimento {
 
@@ -17,9 +17,8 @@ public class MovimentoRato implements EstrategiaMovimento {
         if (!tabuleiro.estaDentroDosLimites(destino)) return false;
 
         Peca alvo = tabuleiro.obterPecaEm(destino);
-        String simbolo = tabuleiro.getSimbolo(destino);
 
-        if (simbolo.equals("~") || simbolo.equals(" ")) {
+        if (alvo == null) {
             // Pode entrar na água ou em espaço vazio
             tabuleiro.moverPeca(rato, rato.getPosicao(), destino);
             return true;

@@ -4,7 +4,7 @@ import framework.model.Jogador;
 import framework.model.Posicao;
 import framework.model.Terreno;
 import framework.model.pecas.Peca;
-import jogo.abstractFactory.SelvaTabuleiroFactory;
+import jogo.abstractFactory.SelvaJogoFactory;
 
 import java.util.List;
 
@@ -89,7 +89,7 @@ public class SelvaTabuleiroAdapter implements TabuleiroAdapter {
         };
         String[] animaisNome = { "LEAO", "RATO", "TIGRE", "LEOPARDO", "CAO", "LOBO", "GATO", "ELEFANTE" };
 
-        FabricaAbstrataJogo selvaFactory = new SelvaTabuleiroFactory();
+        FabricaAbstrataJogo selvaFactory = new SelvaJogoFactory();
         for (int jogadorContador = 0; jogadorContador < jogadores.size(); jogadorContador++) {
             int animaisNomeContador = 0;
             for (var posicoesPecas : matrizPosicoesPecas[jogadorContador]) {

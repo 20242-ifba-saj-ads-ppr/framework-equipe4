@@ -10,7 +10,7 @@ import jogo.model.Animal;
 import jogo.model.SelvaTabuleiro;
 import jogo.adapter.SelvaTabuleiroAdapter;
 
-public class SelvaTabuleiroFactory implements FabricaAbstrataJogo {
+public class SelvaJogoFactory implements FabricaAbstrataJogo {
     @Override
     public Peca criarPeca(Jogador jogador, Posicao posicao, int forca, String tipo) {
         Peca peca = new Animal(tipo, forca, jogador, posicao);

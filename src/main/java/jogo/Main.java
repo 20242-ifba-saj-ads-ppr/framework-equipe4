@@ -1,33 +1,50 @@
 package jogo;
 
-import framework.command.MoverCommand;
-import framework.command.GerenciadorComandos;
+import framework.command.*;
+import framework.facade.GerenciadorTurnos;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import framework.abstractFactory.*;
+import framework.builder.*;
+import framework.model.Jogador;
 import framework.model.Posicao;
-import framework.model.pecas.Peca;
-import framework.strategy.EstrategiaMovimento;
+import framework.model.Tabuleiro;
+import jogo.abstractFactory.SelvaJogoFactory;
+import jogo.builder.ConstrutorJogador;
+import jogo.facade.RegrasJogoFacadeImpl;
+
 import jogo.model.Animal;
-import jogo.strategy.MovimentoRato;
+import jogo.model.SelvaTabuleiro;
 import jogo.strategy.MovimentoElefante;
 import jogo.strategy.MovimentoPadrao;
-import framework.facade.GerenciadorTurnos;
+import jogo.strategy.MovimentoRato;
+
 public class Main {
     public static void main(String[] args) {
         
-        // Inicializa o jogo
-       JogoSelva jogo = new JogoSelva();
+        FabricaAbstrataJogo tabuleiroFactory = new SelvaJogoFactory();
+        Tabuleiro tabuleiro = tabuleiroFactory.criarTabuleiro();
+       
+        ConstrutorJogador construtorJogador = new ConstrutorJogador();
+        DiretorJogador diretorJogador = new DiretorJogador(construtorJogador);
 
-        // Configura as estratégias de movimento
-        for (Animal animal : jogo.getAnimais()) {
-            switch (animal.getTipoAnimal()) {
-                case RATO -> animal.setEstrategiaMovimento(new MovimentoRato());
-                case ELEFANTE -> animal.setEstrategiaMovimento(new MovimentoElefante());
-                default -> animal.setEstrategiaMovimento(new MovimentoPadrao());
-            }
-        } 
+        Jogador jogador1 = diretorJogador.criarJogador("Pedro", "Preto", 0);
+        Jogador jogador2 = diretorJogador.criarJogador("Carlos", "Branco", 0);
 
-        // Exemplo: mover o rato da posição (2,2) para (3,2)
-        Posicao origem = new Posicao(2, 2);
-        Animal rato = jogo.getAnimalEm(origem);
+        List<Jogador> jogadores = new ArrayList<>();
+        jogadores.add(jogador1);
+        jogadores.add(jogador2);
+        tabuleiro.inicializaTerrenoPecas(jogadores);
+        //  instanciar regras do jogo facade passando tabuleiro
+        //RegrasJogoFacadeImpl regrasDoJogo = new RegrasJogoFacadeImpl(tabuleiro);
+
+
+        Animal animal = (Animal) tabuleiroFactory.criarPeca(jogador2, new Posicao(1, 1), 0, "LEAO");
+        animal.setEstrategiaMovimento(new MovimentoPadrao());
+        // 3. Suponha que queremos mover o rato do jogador 1 da posição (2,2) para (3,2)
+        Animal rato = (Animal)tabuleiro.obterPecaEm(new Posicao(2, 2));
         Posicao destino = new Posicao(3, 2);
 
         // Garante que o rato existe na posição indicada
