@@ -555,7 +555,7 @@ A FabricaPecasJogador é a Flyweight Factory, responsável por gerenciar as inst
 
 Assim, a FabricaPecasJogador trabalha em conjunto com as classes PecasBrancas e PecasPretas para implementar o padrão Flyweight, garantindo que o estado compartilhado seja gerenciado de forma eficiente, enquanto o estado variável de cada peça (como tipo ou símbolo) seja tratado separadamente. 
 
-### Facade
+## Facade
 
 ### Intenção
 Fornecer uma interface unificada para um conjunto de interfaces em um subsistema. O Facade define uma interface de nível mais alto que torna o subsistema mais fácil de usar. – `GoF`
@@ -1178,6 +1178,7 @@ public class Caretaker {
 ``` 
 
 # Construindo um Novo Jogo
+
 ## Passo a Passo para utilização do Framework
 
 
