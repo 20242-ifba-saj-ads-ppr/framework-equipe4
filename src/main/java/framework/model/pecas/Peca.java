@@ -9,7 +9,7 @@ public abstract class Peca implements PecaPrototype {
     protected final int forca;
     protected Jogador jogador;
     protected Posicao posicao;
-
+    
    public Peca(String tipo, int forca, Jogador jogador, Posicao posicao) {
         this.tipo = tipo;
         this.forca = forca;
@@ -23,6 +23,7 @@ public abstract class Peca implements PecaPrototype {
         this.jogador = peca.jogador;
         this.posicao = peca.posicao;
     }
+
     @Override
     public Peca clonar() {
         try {
@@ -59,5 +60,10 @@ public abstract class Peca implements PecaPrototype {
 
     public void setPosicao(Posicao posicao) {
         this.posicao = posicao;
+    }
+
+    public String getSimbolo() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getSimbolo'");
     } 
 }

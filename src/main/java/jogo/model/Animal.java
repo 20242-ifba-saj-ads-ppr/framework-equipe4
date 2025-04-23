@@ -6,6 +6,7 @@ import framework.model.Tabuleiro;
 import framework.model.pecas.Peca;
 import framework.model.pecas.TipoAnimal;
 import framework.strategy.EstrategiaMovimento;
+import java.util.Arrays;
 
 public class Animal extends Peca{
     private EstrategiaMovimento estrategiaMovimento;
@@ -18,10 +19,14 @@ public class Animal extends Peca{
     }
 
     public Animal(String tipo, int forca, Jogador jogador, Posicao posicao) {
-        super(tipo, forca, jogador, posicao);
+    super(tipo, forca, jogador, posicao);
+    try {
         this.tipoAnimal = TipoAnimal.valueOf(tipo);
-
+    } catch (IllegalArgumentException e) {
+        throw new IllegalArgumentException("Tipo de animal inválido: " + tipo + 
+               ". Valores válidos: " + Arrays.toString(TipoAnimal.values()));
     }
+}
 
     public TipoAnimal getTipoAnimal() {
         return tipoAnimal;

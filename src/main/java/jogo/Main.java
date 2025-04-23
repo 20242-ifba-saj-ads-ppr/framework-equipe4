@@ -1,25 +1,19 @@
 package jogo;
 
-import framework.command.*;
-import framework.facade.GerenciadorTurnos;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import framework.abstractFactory.*;
 import framework.builder.*;
+import framework.command.*;
+import framework.facade.GerenciadorTurnos;
 import framework.model.Jogador;
 import framework.model.Posicao;
 import framework.model.Tabuleiro;
+import framework.singleton.ConfiguracaoJogo;
+import java.util.ArrayList;
+import java.util.List;
 import jogo.abstractFactory.SelvaJogoFactory;
 import jogo.builder.ConstrutorJogador;
-import jogo.facade.RegrasJogoFacadeImpl;
-
 import jogo.model.Animal;
-import jogo.model.SelvaTabuleiro;
-import jogo.strategy.MovimentoElefante;
 import jogo.strategy.MovimentoPadrao;
-import jogo.strategy.MovimentoRato;
 
 public class Main {
     public static void main(String[] args) {
@@ -39,7 +33,9 @@ public class Main {
         tabuleiro.inicializaTerrenoPecas(jogadores);
         //  instanciar regras do jogo facade passando tabuleiro
         //RegrasJogoFacadeImpl regrasDoJogo = new RegrasJogoFacadeImpl(tabuleiro);
-
+        
+        ConfiguracaoJogo config = ConfiguracaoJogo.getInstancia();
+        System.out.println("Dimensões: " + config.getAlturaTabuleiro() + "x" + config.getLarguraTabuleiro());
 
         Animal animal = (Animal) tabuleiroFactory.criarPeca(jogador2, new Posicao(1, 1), 0, "LEAO");
         animal.setEstrategiaMovimento(new MovimentoPadrao());
@@ -49,7 +45,7 @@ public class Main {
 
         // Garante que o rato existe na posição indicada
         if (rato != null) {
-            GerenciadorTurnos gerenciadorTurnos = jogo.getGerenciadorTurnos(); // Esse método deve estar na classe JogoSelva
+            GerenciadorTurnos gerenciadorTurnos = new GerenciadorTurnos(jogadores);
 
             // Cria comando de mover
             MoverCommand comando = new MoverCommand(rato.getJogador(), destino, rato, gerenciadorTurnos);

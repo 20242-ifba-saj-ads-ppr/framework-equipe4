@@ -1,24 +1,26 @@
 package framework.singleton;
 
 public final class ConfiguracaoJogo {
-    private static volatile ConfiguracaoJogo instancia;
     private int quantidadeMaximaJogador;
     private int larguraTabuleiro = 7;
     private int alturaTabuleiro = 9;
     
     private ConfiguracaoJogo() {}
     
+    private static volatile ConfiguracaoJogo instancia;
+
     public static ConfiguracaoJogo getInstancia() {
-        if (instancia == null) {
+        ConfiguracaoJogo result = instancia;
+        if (result == null) {
             synchronized (ConfiguracaoJogo.class) {
-                if (instancia == null) {
-                    instancia = new ConfiguracaoJogo();
+                result = instancia;
+                if (result == null) {
+                    instancia = result = new ConfiguracaoJogo();
                 }
             }
         }
-        return instancia;
+        return result;
     }
-    
     public int getLarguraTabuleiro() {
         return larguraTabuleiro;
     }

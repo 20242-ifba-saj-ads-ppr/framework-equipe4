@@ -6,19 +6,19 @@ public class Terreno {
     private int linhas;
     private int colunas;
     private TipoTerrenoEnum tipoTerreno;
-    private Peca peca = null;
+    private Peca peca;
 
-    public Terreno(int linhas, int colunas) {
-        this.linhas = linhas;
-        this.colunas = colunas;
-        this.tipoTerreno = TipoTerrenoEnum.COMUM;
+    public Peca getPeca() {
+        return peca;
+    }
+    public Terreno(int linha, int coluna, TipoTerrenoEnum comum) {
+    }
+    
+    public Terreno(int linha, int coluna) {
+        this(linha, coluna, TipoTerrenoEnum.COMUM); // Valor padrão
     }
 
-    public Terreno(int linhas, int colunas, TipoTerrenoEnum tipoTerreno) {
-        this.linhas = linhas;
-        this.colunas = colunas;
-        this.tipoTerreno = tipoTerreno;
-    }
+
 
     public int getLinhas() {
         return linhas;
@@ -44,12 +44,17 @@ public class Terreno {
         this.tipoTerreno = tipoTerreno;
     }
 
-    public Peca getPeca() {
-        return peca;
+    public String getSimbolo() {
+    if (peca != null) {
+        return peca.getSimbolo(); 
     }
+    return tipoTerreno.getSimbolo(); 
+}
 
     public void setPeca(Peca peca) {
         this.peca = peca;
     }
+
+    
 }
 

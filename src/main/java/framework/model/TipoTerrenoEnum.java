@@ -5,4 +5,9 @@ public enum TipoTerrenoEnum {
     AGUA,
     TOCA,
     ARMADILHA;
+
+    String getSimbolo() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getSimbolo'");
+    }
 }
