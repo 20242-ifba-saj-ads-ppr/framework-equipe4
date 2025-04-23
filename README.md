@@ -422,9 +422,62 @@ Construir famílias de peças para cada jogador sem especificar suas classes con
 - **AbstractProduct ():**
 - **ConcreteProduct ():**
 
+## Singleton
+### Intenção
+Garantir que o tabuleiro contendo o jogo selva tenha somente uma instância e fornecer um ponto global de acesso para ele.
+
+### Motivação
+No desenvolvimento do jogo, surgiram problemas quando diferentes partes do sistema criaram suas próprias instâncias da classe ConfiguracaoJogo. Isso causou inconsistências, como tabuleiros de tamanhos diferentes entre a interface e a lógica do jogo, além de desperdício de recursos e dificuldade para manter as configurações sincronizadas. O Singleton resolveu esses problemas garantindo uma única instância global, eliminando conflitos e simplificando o controle das configurações do jogo.
+
+### Diagrama UML (cenário sem o padrão)
+```mermaid
+classDiagram
+    class ConfiguracaoJogo {
+        - quantidadeMaximaJogador: int
+        - larguraTabuleiro: int
+        - alturaTabuleiro: int
+        + ConfiguracaoJogo() 
+        + getLarguraTabuleiro(): int
+        + getAlturaTabuleiro(): int
+        + getQuantidadeMaximaJogador(): int
+        + setLarguraTabuleiro(larguraTabuleiro: int): void
+        + setAlturaTabuleiro(alturaTabuleiro: int): void
+        + setQuantidadeMaximaJogador(qtd: int): void
+    }
+ ```
+### Diferenças em Relação ao Singleton
+Sem Controle de Instância : Não há um método estático como getInstancia() nem um atributo estático para armazenar a única instância.
+Múltiplas Instâncias : Qualquer parte do código pode criar novas instâncias da classe ConfiguracaoJogo.
+Flexibilidade : Essa abordagem é mais flexível, mas perde a garantia de unicidade fornecida pelo Singleton.
+     
+## Estrutura do padrão (GOF)
+![image](https://github.com/user-attachments/assets/a69b7505-36cd-4385-b81f-1f779be33d28)
 
 
-## 4 Prototype
+### Diagrama UML (cenário com o padrão):
+```mermaid
+classDiagram
+    class ConfiguracaoJogo {
+        - instancia: ConfiguracaoJogo (static, volatile)
+        - quantidadeMaximaJogador: int
+        - larguraTabuleiro: int
+        - alturaTabuleiro: int
+        + getInstancia(): ConfiguracaoJogo (static)
+        + getLarguraTabuleiro(): int
+        + getAlturaTabuleiro(): int
+        + getQuantidadeMaximaJogador(): int
+        + setLarguraTabuleiro(larguraTabuleiro: int): void
+        + setAlturaTabuleiro(alturaTabuleiro: int): void
+        + setQuantidadeMaximaJogador(qtd: int): void
+    }
+```
+
+### Participantes
+
+### Descrição Textual
+- **Singleton(ConfiguracaoJogo):**
+
+## 5. Prototype
 
 ## Intenção  
 Especificar os tipos de objetos a serem criados usando uma instância prototípica e criar novos objetos copiando esse protótipo. – `GOF`
@@ -465,8 +518,6 @@ classDiagram
 
 ![image](https://github.com/20242-ifba-saj-ads-ppr/framework-equipe4/blob/1820c78e4b0b87f6eef921bfccb0392333f999a6/imagem/imageProto.png)
 
-
-## Padrão aplicado no cenário
 
 ### Descrição textual
 
