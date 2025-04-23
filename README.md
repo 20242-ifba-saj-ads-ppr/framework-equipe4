@@ -209,13 +209,45 @@ classDiagram
         +fabricar(Posicao, Jogador, TipoAnimal): Peca
     }
 
-    class Peca
-    class Posicao
-    class Jogador
-    class TipoAnimal
+    class CriadorPecaSelvaConcreto {
+        +fabricar(Posicao, Jogador): Peca
+        +fabricar(Posicao, Jogador, TipoAnimal): Peca
+    }
 
-    CriadorPeca <|.. FactoryMethodCriadorPeca
-    FactoryMethodCriadorPeca --> Peca
+    class Peca {
+        <<abstract>>
+        -tipo: String
+        -forca: int
+        -jogador: Jogador
+        -posicao: Posicao
+        +getTipo(): String
+        +getForca(): int
+        +getJogador(): Jogador
+        +setJogador(Jogador): void
+        +getPosicao(): Posicao
+        +setPosicao(Posicao): void
+    }
+
+    class TipoAnimal {
+        <<enumeration>>
+        GATO
+        CACHORRO
+        ELEFANTE
+        LEOPARDO
+        LEAO
+        RATO
+        TIGRE
+        LOBO
+        +getForca(): int
+        +getSimbolo(): String
+    }
+
+    CriadorPeca <|-- FactoryMethodCriadorPeca
+    FactoryMethodCriadorPeca <|-- CriadorPecaSelvaConcreto
+    CriadorPecaSelvaConcreto ..> Peca
+    Peca --> TipoAnimal
+  
+	
 ```
 
 ## Participantes
