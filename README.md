@@ -1,14 +1,16 @@
  
 
-# Padrão Builder
+# Padrões Criacionais
 
-## Intenção
+## Builder
+
+### Intenção
  Separar a construção de um objeto complexo da sua representação de modo que o
  mesmo processo de construção possa criar diferentes representações - `GOF`
 
 ### Motivação
 
-#### Cenário sem a aplicação do padrão
+### Cenário sem a aplicação do padrão
 
 Durante o desenvolvimento de jogos, a criação de objetos como por exemplo Jogador pode ser complexa quando envolve múltiplos atributos e validações. Sem a aplicação do padrão Builder, ao realizar o instanciamento de um jogador seria feita diretamente através de um construtor com múltiplos parâmetros:
 
@@ -134,12 +136,12 @@ public class DiretorJogador {
 COLOCAR
 
 
-# Padrão Factory Method
+## Factory Method
 
-## Intenção  
+### Intenção  
 Definir uma interface para a criação de peças, permitindo que as subclasses decidam qual peça instanciar. Dessa maneira, a criação das peças ganha flexibilidade.
 
-## Motivação
+### Motivação
 
 ### Cenário sem a aplicação do padrão
 
@@ -181,7 +183,7 @@ classDiagram
 ```
 ---
 
-## Estrutura do padrão (GOF)
+### Estrutura do padrão (GOF)
 
 ![image](https://github.com/20242-ifba-saj-ads-ppr/framework-equipe4/blob/1820c78e4b0b87f6eef921bfccb0392333f999a6/imagem/imageFactory.png)
 
@@ -249,14 +251,14 @@ classDiagram
 	
 ```
 
-## Participantes
+### Participantes
 
 - Creator (CriadorPeca): Classe abstrata que define o método factory, deixando para a fábrica a responsabilidade de instanciá-la corretamente.
 - ConcreteCreator (CriadorPecaSelvaConcreto): Implementação concreta de CriadorPeca, especializada na criação de peças do jogo.
 - Product (Peca): Define o contrato básico para todas as peças do jogo. Ela garante que todas as peças possam ser tratadas de maneira uniforme, permitindo que o código que manipula as peças seja flexível e extensível.
 - Client: Usa o método fábrica sem depender de implementações concretas das peças.
   
-## Descrição textual
+### Descrição textual
 
 A interface CriadorPeca é a base para a criação de peças no jogo. Ela define um contrato que todas as classes criadoras de peças devem seguir, garantindo que cada peça seja criada com uma posição (Posicao) e um jogador (Jogador) associados. Essa abstração permite que o processo de criação de peças seja padronizado e desacoplado do restante do código. 
 
@@ -329,12 +331,12 @@ public class CriadorPecaSelvaConcreto implements FactoryMethodCriadorPeca {
 
 COLOCAR
 
-# Padrão Abstract Factory
+## Abstract Factory
 
-## Intenção
+### Intenção
 Construir famílias de peças para cada jogador sem especificar suas classes concretas.
 
-## Motivação
+### Motivação
 
 
 ### Cenário sem a aplicação do padrão
@@ -347,206 +349,21 @@ Construir famílias de peças para cada jogador sem especificar suas classes con
 ### Descrição textual
 
 
-## Participantes
+### Participantes
 - AbstractFactory (FabricaAbstratataJogo): Define uma interface para criar uma família de peças e um tabuleiro.
 - ConcreteFactory ():
 - AbstractProduct ():
 - ConcreteProduct ():
 
-# Padrão Flyweight
-
-## Intenção
-Otimizar a criação e o gerenciamento de peças usando o padrão Flyweight economiza memória ao reutilizar instâncias de PecasJogador que compartilham o mesmo estado (cor). Em vez de criar múltiplas instâncias idênticas para peças do mesmo time, uma única instância é mantida no cache (FabricaPecasJogador) e compartilhada entre todas as peças com a mesma cor, como "branco" ou "preto". Isso reduz o uso de memória e simplifica o gerenciamento das peças no jogo.
-
-## Motivação
-
-**Diagrama UML (cenário sem o padrão):**
-
-### Estrutura do padrão (GoF)
-![image](https://github.com/user-attachments/assets/9a9b2c77-8e8a-42cf-9335-8d0f34b8d042)
 
 
-## Padrão aplicado no cenário
-
-## Participantes
-
-
-## Descrição Textual
-No contexto do padrão Flyweight, a interface PecasJogador atua como a classe Flyweight, representando os atributos compartilhados entre as peças que podem ser reutilizados. Nesse caso, a cor do jogador ("preto" ou "branco") é o principal estado compartilhado, tornando essa interface a base comum para todas as instâncias que possuem características idênticas e que podem ser reutilizadas sem necessidade de criar novas instâncias.  
-
-A FabricaPecasJogador é a Flyweight Factory, responsável por gerenciar as instâncias de PecasJogador. Ela garante que, para cada cor ("branco" ou "preto"), apenas uma instância de PecasBrancas ou PecasPretas será criada e compartilhada entre as peças. Ao solicitar uma peça com determinada cor, a fábrica verifica se já existe uma instância dessa cor em seu cache; se não, ela cria uma nova instância e a armazena para reutilização futura. Essa abordagem economiza recursos ao evitar a criação de múltiplas instâncias idênticas. 
-
-Assim, a FabricaPecasJogador trabalha em conjunto com as classes PecasBrancas e PecasPretas para implementar o padrão Flyweight, garantindo que o estado compartilhado seja gerenciado de forma eficiente, enquanto o estado variável de cada peça (como tipo ou símbolo) seja tratado separadamente. 
-
-# Padrão Facade
-
-## Intenção
-
-Fornecer uma interface unificada para um conjunto de interfaces em um subsistema. O Facade define uma interface de nível mais alto que torna o subsistema mais fácil de usar. – `GoF`
-
-
-## Motivação
-
-### Cenário sem a aplicação do padrão
-
-Sem o uso do padrão Facade, o código cliente precisa interagir diretamente com diversos componentes internos do jogo, como o controle de turnos, as regras de movimentação e captura. Isso gera um forte acoplamento e maior complexidade no código:
-
-```java
-if (peca.podeMover(destino) && regrasJogo.capturaValida(peca, inimigo)) {
-    gerenciadorTurnos.proximoTurno();
-}
-```
-
-Nesse cenário, o cliente precisa conhecer múltiplas classes e suas interações internas, o que torna a manutenção e a extensão do sistema mais difíceis.
-
-**Diagrama UML (cenário sem o padrão):**
-
-```mermaid
-classDiagram
-    class Cliente {
-        +realizarJogada()
-    }
-
-    class GerenciadorTurnos {
-        +proximoTurno()
-        +getJogadorAtual()
-    }
-
-    class Peca {
-        +podeMover(Posicao destino)
-    }
-
-    Cliente --> GerenciadorTurnos
-    Cliente --> Peca
-```
-
-
-### Estrutura do padrão (GoF)
-![image](https://github.com/20242-ifba-saj-ads-ppr/framework-equipe4/blob/1820c78e4b0b87f6eef921bfccb0392333f999a6/imagem/imageFacade.png)
-
-
-## Padrão aplicado no cenário
-
-### Descrição textual
-
-Ao aplicarmos o padrão Facade ao jogo Selva, criamos uma interface RegrasJogoFacade esta encapsula a lógica de movimentação, captura e controle de turnos. O cliente por sua vez ao invés de lidar com diversas classes diretamente, interage com essa fachada única.Reduzindo o acoplamento, melhorando a organização e facilitando modificações futuras.
-
-
-
-### Classes envolvidas
-
-- RegrasJogoFacade **-->** Interface
-- RegrasJogoSelvaFacade **-->** Implementação concreta
-- GerenciadorTurnos **-->** Subsistema interno de controle de turnos
-- Peca, Posicao, Jogador **-->** Entidades do jogo que participam das regras
-
-**Diagrama UML (cenário com o padrão):**
-
-```mermaid
-classDiagram
-    class RegrasJogoFacade {
-        <<interface>>
-        +movimentoValido(Peca, Posicao): boolean
-        +capturaValida(Peca, Peca): boolean
-        +verificarVencedor(): Jogador
-        +passarTurno()
-        +getJogadorAtual(): Jogador
-    }
-
-    class RegrasJogoSelvaFacade {
-        +movimentoValido(Peca, Posicao): boolean
-        +capturaValida(Peca, Peca): boolean
-        +verificarVencedor(): Jogador
-        +passarTurno()
-        +getJogadorAtual(): Jogador
-    }
-
-    class GerenciadorTurnos {
-        -turnoAtual: int
-        -jogadores: List<Jogador>
-        +proximoTurno()
-        +getJogadorAtual(): Jogador
-    }
-
-    RegrasJogoFacade <|.. RegrasJogoSelvaFacade
-    RegrasJogoSelvaFacade --> GerenciadorTurnos
-```
-
-
-
-## Participantes
-
-- Facade (RegrasJogoFacade): Interface unificada para operações de turno, movimento e regras do jogo.
-- ConcreteFacade (RegrasJogoSelvaFacade): Implementação concreta da interface, orquestra as operações internas.
-- Subsistemas (GerenciadorTurnos, Peca): Componentes internos encapsulados pela fachada.
-- Cliente: Interage apenas com a fachada, sem conhecer os detalhes internos.
-
-
-
-## Código
-
-### Framework
-
-**GerenciadorTurnos.java**
-
-```java
-package framework.facade;
-
-import java.util.List;
-import framework.model.Jogador;
-
-public class GerenciadorTurnos {
-    private int turnoAtual;
-    private List<Jogador> jogadores;
-
-    public GerenciadorTurnos(List<Jogador> jogadores) {
-        if (jogadores == null || jogadores.isEmpty()) {
-            throw new IllegalArgumentException("Lista de jogadores não pode ser vazia");
-        }
-        this.jogadores = jogadores; 
-        this.turnoAtual = 0;
-    }
-
-    public void proximoTurno() {
-        turnoAtual = (turnoAtual + 1) % jogadores.size();
-    }
-
-    public Jogador getJogadorAtual() {
-        return jogadores.get(turnoAtual); 
-    }
-}
-```
-
-**RegrasJogoFacade.java**
-
-```java
-package framework.facade;
-
-import framework.model.Jogador;
-import framework.model.Posicao;
-import framework.model.pecas.Peca;
-
-public interface RegrasJogoFacade {
-    boolean movimentoValido(Peca peca, Posicao destino);
-    boolean capturaValida(Peca atacante, Peca defensor);
-    Jogador verificarVencedor();
-    void passarTurno();
-    Jogador getJogadorAtual();
-}
-```
-
-### Código (Jogo): 
-
-COLOCAR
-    
-
-# Padrão Prototype
+### Prototype
 
 ## Intenção  
 Especificar os tipos de objetos a serem criados usando uma instância prototípica e criar novos objetos copiando esse protótipo. – `GOF`
 
 
-## Motivação
+### Motivação
 
 ### Cenário sem a aplicação do padrão
 
@@ -644,13 +461,200 @@ public interface PecaPrototype extends Cloneable {
 
 COLOCAR
 
+# Padrões Estruturais
 
-# Padrão State
 
-## Intenção
+## Flyweight
+
+### Intenção
+Otimizar a criação e o gerenciamento de peças usando o padrão Flyweight economiza memória ao reutilizar instâncias de PecasJogador que compartilham o mesmo estado (cor). Em vez de criar múltiplas instâncias idênticas para peças do mesmo time, uma única instância é mantida no cache (FabricaPecasJogador) e compartilhada entre todas as peças com a mesma cor, como "branco" ou "preto". Isso reduz o uso de memória e simplifica o gerenciamento das peças no jogo.
+
+### Motivação
+
+**Diagrama UML (cenário sem o padrão):**
+
+### Estrutura do padrão (GoF)
+![image](https://github.com/user-attachments/assets/9a9b2c77-8e8a-42cf-9335-8d0f34b8d042)
+
+
+### Padrão aplicado no cenário
+
+### Participantes
+
+
+### Descrição Textual
+No contexto do padrão Flyweight, a interface PecasJogador atua como a classe Flyweight, representando os atributos compartilhados entre as peças que podem ser reutilizados. Nesse caso, a cor do jogador ("preto" ou "branco") é o principal estado compartilhado, tornando essa interface a base comum para todas as instâncias que possuem características idênticas e que podem ser reutilizadas sem necessidade de criar novas instâncias.  
+
+A FabricaPecasJogador é a Flyweight Factory, responsável por gerenciar as instâncias de PecasJogador. Ela garante que, para cada cor ("branco" ou "preto"), apenas uma instância de PecasBrancas ou PecasPretas será criada e compartilhada entre as peças. Ao solicitar uma peça com determinada cor, a fábrica verifica se já existe uma instância dessa cor em seu cache; se não, ela cria uma nova instância e a armazena para reutilização futura. Essa abordagem economiza recursos ao evitar a criação de múltiplas instâncias idênticas. 
+
+Assim, a FabricaPecasJogador trabalha em conjunto com as classes PecasBrancas e PecasPretas para implementar o padrão Flyweight, garantindo que o estado compartilhado seja gerenciado de forma eficiente, enquanto o estado variável de cada peça (como tipo ou símbolo) seja tratado separadamente. 
+
+### Facade
+
+### Intenção
+Fornecer uma interface unificada para um conjunto de interfaces em um subsistema. O Facade define uma interface de nível mais alto que torna o subsistema mais fácil de usar. – `GoF`
+
+
+### Motivação
+
+### Cenário sem a aplicação do padrão
+
+Sem o uso do padrão Facade, o código cliente precisa interagir diretamente com diversos componentes internos do jogo, como o controle de turnos, as regras de movimentação e captura. Isso gera um forte acoplamento e maior complexidade no código:
+
+```java
+if (peca.podeMover(destino) && regrasJogo.capturaValida(peca, inimigo)) {
+    gerenciadorTurnos.proximoTurno();
+}
+```
+
+Nesse cenário, o cliente precisa conhecer múltiplas classes e suas interações internas, o que torna a manutenção e a extensão do sistema mais difíceis.
+
+**Diagrama UML (cenário sem o padrão):**
+
+```mermaid
+classDiagram
+    class Cliente {
+        +realizarJogada()
+    }
+
+    class GerenciadorTurnos {
+        +proximoTurno()
+        +getJogadorAtual()
+    }
+
+    class Peca {
+        +podeMover(Posicao destino)
+    }
+
+    Cliente --> GerenciadorTurnos
+    Cliente --> Peca
+```
+
+
+### Estrutura do padrão (GoF)
+![image](https://github.com/20242-ifba-saj-ads-ppr/framework-equipe4/blob/1820c78e4b0b87f6eef921bfccb0392333f999a6/imagem/imageFacade.png)
+
+
+### Padrão aplicado no cenário
+
+### Descrição textual
+
+Ao aplicarmos o padrão Facade ao jogo Selva, criamos uma interface RegrasJogoFacade esta encapsula a lógica de movimentação, captura e controle de turnos. O cliente por sua vez ao invés de lidar com diversas classes diretamente, interage com essa fachada única.Reduzindo o acoplamento, melhorando a organização e facilitando modificações futuras.
+
+
+
+### Classes envolvidas
+
+- RegrasJogoFacade **-->** Interface
+- RegrasJogoSelvaFacade **-->** Implementação concreta
+- GerenciadorTurnos **-->** Subsistema interno de controle de turnos
+- Peca, Posicao, Jogador **-->** Entidades do jogo que participam das regras
+
+**Diagrama UML (cenário com o padrão):**
+
+```mermaid
+classDiagram
+    class RegrasJogoFacade {
+        <<interface>>
+        +movimentoValido(Peca, Posicao): boolean
+        +capturaValida(Peca, Peca): boolean
+        +verificarVencedor(): Jogador
+        +passarTurno()
+        +getJogadorAtual(): Jogador
+    }
+
+    class RegrasJogoSelvaFacade {
+        +movimentoValido(Peca, Posicao): boolean
+        +capturaValida(Peca, Peca): boolean
+        +verificarVencedor(): Jogador
+        +passarTurno()
+        +getJogadorAtual(): Jogador
+    }
+
+    class GerenciadorTurnos {
+        -turnoAtual: int
+        -jogadores: List<Jogador>
+        +proximoTurno()
+        +getJogadorAtual(): Jogador
+    }
+
+    RegrasJogoFacade <|.. RegrasJogoSelvaFacade
+    RegrasJogoSelvaFacade --> GerenciadorTurnos
+```
+
+
+
+### Participantes
+
+- Facade (RegrasJogoFacade): Interface unificada para operações de turno, movimento e regras do jogo.
+- ConcreteFacade (RegrasJogoSelvaFacade): Implementação concreta da interface, orquestra as operações internas.
+- Subsistemas (GerenciadorTurnos, Peca): Componentes internos encapsulados pela fachada.
+- Cliente: Interage apenas com a fachada, sem conhecer os detalhes internos.
+
+### Código
+
+### Framework
+
+**GerenciadorTurnos.java**
+
+```java
+package framework.facade;
+
+import java.util.List;
+import framework.model.Jogador;
+
+public class GerenciadorTurnos {
+    private int turnoAtual;
+    private List<Jogador> jogadores;
+
+    public GerenciadorTurnos(List<Jogador> jogadores) {
+        if (jogadores == null || jogadores.isEmpty()) {
+            throw new IllegalArgumentException("Lista de jogadores não pode ser vazia");
+        }
+        this.jogadores = jogadores; 
+        this.turnoAtual = 0;
+    }
+
+    public void proximoTurno() {
+        turnoAtual = (turnoAtual + 1) % jogadores.size();
+    }
+
+    public Jogador getJogadorAtual() {
+        return jogadores.get(turnoAtual); 
+    }
+}
+```
+
+**RegrasJogoFacade.java**
+
+```java
+package framework.facade;
+
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.pecas.Peca;
+
+public interface RegrasJogoFacade {
+    boolean movimentoValido(Peca peca, Posicao destino);
+    boolean capturaValida(Peca atacante, Peca defensor);
+    Jogador verificarVencedor();
+    void passarTurno();
+    Jogador getJogadorAtual();
+}
+```
+
+### Código (Jogo): 
+
+COLOCAR
+
+#Padrões Comportamentais
+    
+## State
+
+### Intenção
 Permite a um objeto alterar seu comportamento quando o seu estado interno muda. No contexto desse framework, o comportamento da movimentação de peças será alterado para só permitir que a peça do jogador atual seja movida.
 
-## Motivação
+### Motivação
 Em jogos de turno, é necessário controlar qual jogador pode executar ações em determinado momento. Usar estruturas condicionais (if, switch) espalhadas pelo código para verificar o jogador atual torna o sistema rígido e difícil de manter. Com o padrão State, encapsulamos os comportamentos de cada estado em classes específicas, permitindo que o jogo altere dinamicamente seu comportamento ao mudar o estado atual.
 
 ### Cenário sem a aplicação do padrão
@@ -669,10 +673,10 @@ classDiagram
     JogoSelva -- Jogador
 ```
 
-## Estrutura do padrão (GOF)
+### Estrutura do padrão (GOF)
 ![image](https://github.com/user-attachments/assets/f08f65f2-6a44-4316-ba9d-3c3810a970e2)
 
-## Padrão aplicado no cenário
+### Padrão aplicado no cenário
 ```mermaid
 classDiagram
     class EstadoTurno {
@@ -699,7 +703,7 @@ classDiagram
     GerenciadorTurnos --> EstadoTurno
 ```
 
-## Participantes
+### Participantes
 - **Context (GerenciadorTurnos):** Armazena a referência para o estado atual e delega a ele o comportamento.
 - **State (EstadoTurno):** Define uma interface para encapsulamento comum para todos os estados.
 - **ConcreteStates (TurnoJogador1, TurnoJogador2):** Implementa o comportamento específico para cada um dos jogadores, garantindo que cada jogador consiga mover apenas as suas peças.
@@ -761,7 +765,24 @@ public class GerenciadorTurnos {
 }
 ```
 
-# Padrão Command
+## Strategy
+### Intenção
+Permitir de maneira simples a variação dos algoritmos utilizados na resolução de um determinado problema. No contexto desse framework, o Strategy está sendo utilizado para alterar o comportamento move() do elefante e do rato, que possuem características de movimento e captura especiais.
+
+### Motivação
+
+### Cenário sem a aplicação do padrão
+
+
+### Estrutura do padrão (GOF)
+![image](https://github.com/user-attachments/assets/5b5df1d3-1a94-40e7-87e9-3f90ff77d868)
+
+
+### Padrão aplicado no cenário
+
+
+
+## Command
 ## Intenção
 Controlar as chamadas a um determinado componente, no contexto desse framework, a movimentação, modelando cada requisição como um objeto. Permitir que as operações possam ser desfeitas, enfileiradas ou registradas.
 
@@ -788,9 +809,9 @@ classDiagram
     Jogador --> Posicao
 ```
 
-## Estrutura do padrão (GOF)
+### Estrutura do padrão (GOF)
 
-## Padrão aplicado no cenário
+### Padrão aplicado no cenário
 ```mermaid
 classDiagram
     class Comando {
@@ -838,7 +859,7 @@ classDiagram
     MoverComando --> Peca : manipula
     Peca --> Posicao : possui
 ```
-## Participantes
+### Participantes
 - Command (Command): Define a interface comum para todos os comandos, com os métodos execute, undo e redo.
 - ConcreteCommand (MoverCommand): Implementa os comandos execute, executar e desfazer, referenciando o Jogador e Peca.
 - Receiver (Jogador e Peca): Realiza as operações reais que o comando abstrai.
@@ -946,12 +967,12 @@ public class GerenciadorComandos {
 }
 
 ``` 
-# Padrão Memento
+## Memento
 
-## Intenção 
+### Intenção 
 Sem violar o encapsulamento, salvar e carregar um estado interno de um objeto, de maneira que o objeto possa ser restaurado para esse estado mais tarde.
 
-## Motivação
+### Motivação
 No jogo, salvar e restaurar o estado do tabuleiro (como as peças e o jogador atual) exigiria expor detalhes internos do Tabuleiro para outras classes, violando o encapsulamento. Além disso, gerenciar múltiplos estados salvos de forma manual seria confuso, propenso a erros e dificultaria implementar funcionalidades como "desfazer" ou "refazer". O padrão Memento resolve esses problemas ao permitir que o Tabuleiro crie um objeto Memento para armazenar seu estado interno de forma segura e protegida. O Caretaker assume a responsabilidade de gerenciar os estados salvos, organizando-os em uma pilha. Dessa forma, o Tabuleiro mantém total controle sobre seu estado, enquanto o Caretaker simplifica o gerenciamento de múltiplos estados.
 
 ### Cenário sem a aplicação do padrão
@@ -983,10 +1004,10 @@ classDiagram
     JogoSelva  -- Tabuleiro : tabuleiro
 ```
 
-## Estrutura do padrão (GOF)
+### Estrutura do padrão (GOF)
 ![image](https://github.com/user-attachments/assets/7e00245e-1e2a-4196-a9c1-af4f8cd4c071)
 
-## Padrão aplicado no cenário
+### Padrão aplicado no cenário
 ```mermaid
 classDiagram
     class Memento {
@@ -1006,7 +1027,7 @@ classDiagram
 
     Memento  --  Caretaker
 ```
-## Participantes
+### Participantes
 - Originator(Tabuleiro): A classe que cria o memento e restaura o seu estado a partir dele.
 - Memento (Memento):  A classe que armazena o estado do objeto originador. Ela contém os dados necessários para restaurar o estado do jogo.
 - Caretaker (Caretaker): A classe que gerencia os mementos e mantém o histórico dos estados.
