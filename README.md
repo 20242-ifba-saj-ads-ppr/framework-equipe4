@@ -963,7 +963,7 @@ classDiagram
 - **Target (TabuleiroAdapter):** Interface esperada pelo código cliente.
 - **Adapter (TabuleiroSelvaAdapter):** Adapta a interface do tabuleiro real para a interface esperada.
 - **Adaptee (SelvaTabuleiro):** Classe existente com uma interface original e específica.
-- **Client (Lógica do jogo):** Usa o TabuleiroAdapter para interagir com qualquer tipo de tabuleiro.
+- **Client:** Usa o TabuleiroAdapter para interagir com qualquer tipo de tabuleiro.
 
 ---
 
@@ -1123,17 +1123,112 @@ public class GerenciadorTurnos {
 Permitir de maneira simples a variação dos algoritmos utilizados na resolução de um determinado problema. No contexto desse framework, o Strategy está sendo utilizado para alterar o comportamento mover() do elefante e do rato, que possuem características de movimento e captura especiais.
 
 ### Motivação
+Imagine um jogo de tabuleiro com animais onde cada animal possui regras de movimento específicas, como o Elefante que não pode entrar na água nem capturar ratos nela, o Rato que pode entrar na água mas não pode capturar elefantes, e o Leão que pode pular rios desde que não haja ratos bloqueando o caminho. Sem o padrão Strategy, essas regras seriam implementadas diretamente nas classes dos animais, causando problemas como duplicação de código, pois regras semelhantes seriam repetidas em várias classes, falta de flexibilidade para adicionar ou alterar comportamentos sem modificar as classes existentes, e alto acoplamento entre as propriedades dos animais e suas regras de movimento, tornando o código difícil de manter e testar. O padrão Strategy resolve esses problemas ao encapsular as regras de movimento em classes separadas, como MovimentoElefante, MovimentoRato e MovimentoPulo, permitindo que cada animal delegue sua lógica de movimento para uma estratégia específica.
 
 ### Cenário sem a aplicação do padrão
+```mermaid
+classDiagram
+    class Animal {
+        -Posicao posicao
+        -TipoAnimal tipoAnimal
+        -int forca
+        +getPosicao(): Posicao
+        +getTipoAnimal(): TipoAnimal
+        +getForca(): int
+        +mover(Posicao, Tabuleiro): boolean
+    }
 
+    class Elefante {
+        +mover(Posicao, Tabuleiro): boolean
+    }
+
+    class Rato {
+        +mover(Posicao, Tabuleiro): boolean
+    }
+
+    class Leao {
+        +mover(Posicao, Tabuleiro): boolean
+    }
+
+    Animal <|-- Elefante
+    Animal <|-- Rato
+    Animal <|-- Leao
+
+    class Tabuleiro {
+        +estaDentroDosLimites(Posicao): boolean
+        +obterPecaEm(Posicao): Peca
+        +obterTerrenoEm(Posicao): Terreno
+        +moverPeca(Peca, Posicao, Posicao): void
+    }
+
+    class Peca {
+        <<abstract>>
+        +getPosicao(): Posicao
+    }
+
+    Animal --|> Peca
+    Tabuleiro --  Peca
+    Tabuleiro --  Terreno
+```
 
 ### Estrutura do padrão (GOF)
 ![image](https://github.com/user-attachments/assets/5b5df1d3-1a94-40e7-87e9-3f90ff77d868)
 
 
 ### Padrão aplicado no cenário
+```mermaid
+classDiagram
+    class EstrategiaMovimento {
+        <<interface>>
+        +mover(Peca, Posicao, Tabuleiro): boolean
+    }
 
+    class MovimentoElefante {
+        +mover(Peca, Posicao, Tabuleiro): boolean
+    }
 
+    class MovimentoRato {
+        +mover(Peca, Posicao, Tabuleiro): boolean
+    }
+
+    class MovimentoPadrao {
+        +mover(Peca, Posicao, Tabuleiro): boolean
+    }
+
+    class MovimentoPulo {
+        +mover(Peca, Posicao, Tabuleiro): boolean
+    }
+
+    EstrategiaMovimento <|-- MovimentoElefante
+    EstrategiaMovimento <|-- MovimentoRato
+    EstrategiaMovimento <|-- MovimentoPadrao
+    EstrategiaMovimento <|-- MovimentoPulo
+
+    class Animal {
+        -Posicao posicao
+        -TipoAnimal tipoAnimal
+        -int forca
+        +getPosicao(): Posicao
+        +getTipoAnimal(): TipoAnimal
+        +getForca(): int
+    }
+
+    class Tabuleiro {
+        +estaDentroDosLimites(Posicao): boolean
+        +obterPecaEm(Posicao): Peca
+        +obterTerrenoEm(Posicao): Terreno
+        +moverPeca(Peca, Posicao, Posicao): void
+    }
+
+    class Peca {
+        <<abstract>>
+        +getPosicao(): Posicao
+    }
+
+    Animal --|> Peca
+    Tabuleiro --  Peca
+    Tabuleiro  -- Terreno 
+```
 
 ## 11. Command
 ## Intenção
