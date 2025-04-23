@@ -474,9 +474,13 @@ classDiagram
 ```
 
 ### Participantes
-
+- **Singleton(ConfiguracaoJogo):** Garante uma única instância de configuração global por jogo, com um construtor privado e o método getInstancia para acesso centralizado. Controla configurações como tamanho do tabuleiro e quantidade de jogadores, evitando inconsistências.
+  
 ### Descrição Textual
-- **Singleton(ConfiguracaoJogo):**
+A classe ConfiguracaoJogo foi criada para garantir que haja apenas uma instância global de configuração do jogo durante a execução. Para isso, o construtor é privado, impedindo que outras partes do código criem novas instâncias diretamente. A única instância é controlada pelo método getInstancia(), que usa um padrão thread-safe para garantir que funcione corretamente em ambientes multithread. 
+
+Essa classe centraliza todas as configurações importantes do jogo, como o tamanho do tabuleiro (largura e altura) e a quantidade máxima de jogadores. Ela oferece métodos simples para acessar e alterar essas configurações sempre que necessário. Com essa abordagem, evita-se que diferentes partes do sistema usem configurações conflitantes ou desperdicem recursos criando múltiplas instâncias desnecessárias.
+
 
 ## 5. Prototype
 
