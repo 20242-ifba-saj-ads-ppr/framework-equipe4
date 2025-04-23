@@ -1499,6 +1499,264 @@ classDiagram
     Tabuleiro  -- Terreno 
 ```
 
+### Código  (FRAMEWORK): 
+**EstrategiaMovimento.java**
+
+```java
+package framework.strategy;
+
+import framework.model.Posicao;
+import framework.model.Tabuleiro;
+import framework.model.pecas.Peca;
+
+public interface EstrategiaMovimento {
+    boolean mover(Peca peca, Posicao posicaoDestino, Tabuleiro tabuleiro);
+}
+```
+
+### Código  (jogo): 
+**MovimentoElefante.java**
+```java
+package jogo.strategy;
+
+import framework.model.Posicao;
+import framework.model.Tabuleiro;
+import framework.model.pecas.Peca;
+import framework.strategy.EstrategiaMovimento;
+import jogo.model.Animal;
+import framework.model.pecas.TipoAnimal;
+
+public class MovimentoElefante implements EstrategiaMovimento {
+
+    @Override
+    public boolean mover(Peca peca, Posicao destino, Tabuleiro tabuleiro) {
+        Animal elefante = (Animal) peca;
+
+        if (!tabuleiro.estaDentroDosLimites(destino)) return false;
+
+        Peca alvo = tabuleiro.obterPecaEm(destino);
+        String simbolo = tabuleiro.obterTerrenoEm(destino).getSimbolo();
+
+        // Elefante não pode entrar na água
+        if (simbolo.equals("~")) {
+            System.out.println("Elefante não pode entrar na água.");
+            return false;
+        }
+
+        // Pode mover para espaço vazio
+        if (simbolo.equals(" ")) {
+            tabuleiro.moverPeca(elefante, elefante.getPosicao(), destino);
+            return true;
+        }
+
+        if (alvo != null && alvo instanceof Animal) {
+            Animal alvoAnimal = (Animal) alvo;
+
+            // Elefante não pode capturar rato na água
+            String simboloAlvo = tabuleiro.obterTerrenoEm(alvoAnimal.getPosicao()).getSimbolo();
+            if (alvoAnimal.getTipoAnimal() == TipoAnimal.RATO && simboloAlvo.equals("~")) {
+                System.out.println("Elefante não pode capturar rato na água.");
+                return false;
+            }
+
+            // Verifica força
+            if (elefante.getForca() >= alvoAnimal.getForca()) {
+                tabuleiro.moverPeca(elefante, elefante.getPosicao(), destino);
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+
+```
+**MovimentoPadrao.java**
+```java
+package jogo.strategy;
+
+import framework.model.Posicao;
+import framework.model.Tabuleiro;
+import framework.model.pecas.Peca;
+import framework.strategy.EstrategiaMovimento;
+import jogo.model.Animal;
+
+public class MovimentoPadrao implements EstrategiaMovimento {
+    @Override
+    public boolean mover(Peca peca, Posicao posicaoDestino, Tabuleiro tabuleiro) {
+        // obtém o animal (que é a peça no jogo)
+        Animal animal = (Animal) peca;
+
+        // posição atual do animal
+        Posicao posicaoAtual = animal.getPosicao();
+
+        // verifica se a nova posição está dentro dos limites do tabuleiro
+        if (!tabuleiro.estaDentroDosLimites(posicaoDestino)) {
+            System.out.println("ERRO: Nova posição fora dos limites do tabuleiro.");
+            return false;
+        }
+
+        // Obtém o símbolo do terreno na posição de destino
+        String simboloAlvo = tabuleiro.obterTerrenoEm(posicaoDestino).getTipoTerreno().toString();
+
+        // verifica se o alvo é água ("~"), onde peças não podem entrar
+        if (simboloAlvo.equals("~")) {
+            System.out.println("Movimento inválido: " + animal.getTipoAnimal() + " não pode entrar na água.");
+            return false;
+        }
+
+        // verifica se o alvo é uma casa de vitória ("o" ou "O")
+        if (simboloAlvo.equals("o") || simboloAlvo.equals("O")) {
+            if ((simboloAlvo.equals("O") && animal.getJogador().getCor().equals("branco")) ||
+                    (simboloAlvo.equals("o") && animal.getJogador().getCor().equals("preto"))) {
+                System.out.println("Jogador " + animal.getJogador().getCor() + " ganhou o jogo!");
+                return true; // Encerra o movimento indicando que o jogo terminou
+            } else {
+                System.out.println("Movimento inválido: Apenas peças da cor correta podem entrar nessa casa.");
+                return false;
+            }
+        }
+
+        // falta verifica se o alvo é um espaço vazio (" ")
+
+        // corrigir retorno
+        return false;
+    }
+}
+```
+**MovimentoPulo.java**
+```java
+package jogo.strategy;
+
+import framework.model.Posicao;
+import framework.model.Tabuleiro;
+import framework.model.TipoTerrenoEnum;
+import framework.model.pecas.Peca;
+import framework.model.pecas.TipoAnimal;
+import framework.strategy.EstrategiaMovimento;
+import jogo.model.Animal;
+
+public class MovimentoPulo implements EstrategiaMovimento {
+
+    @Override
+    public boolean mover(Peca peca, Posicao posicaoDestino, Tabuleiro tabuleiro) {
+        Animal animal = (Animal) peca;
+        Posicao posicaoAtual = animal.getPosicao();
+
+        int incrementoLinha = calcularIncremento(posicaoAtual.getLinha(), posicaoDestino.getLinha());
+        int incrementoColuna = calcularIncremento(posicaoAtual.getColuna(), posicaoDestino.getColuna());
+
+        Posicao proximaPosicao = new Posicao(posicaoAtual.getLinha() + incrementoLinha,
+                                             posicaoAtual.getColuna() + incrementoColuna);
+
+        // Avança sobre casas de água
+        while (tabuleiro.estaDentroDosLimites(proximaPosicao) &&
+               tabuleiro.obterTerrenoEm(proximaPosicao).getTipoTerreno() == TipoTerrenoEnum.AGUA) {
+            proximaPosicao = new Posicao(proximaPosicao.getLinha() + incrementoLinha,
+                                         proximaPosicao.getColuna() + incrementoColuna);
+        }
+
+        // Verifica se o destino final é válido
+        if (!tabuleiro.estaDentroDosLimites(proximaPosicao)) {
+            System.out.println("Movimento inválido: Fora dos limites do tabuleiro.");
+            return false;
+        }
+
+        Peca pecaNoDestino = tabuleiro.obterPecaEm(proximaPosicao);
+
+        // Verifica se existe um rato na água no meio do caminho
+        Posicao posicaoVerificacao = new Posicao(posicaoAtual.getLinha() + incrementoLinha,
+                                                 posicaoAtual.getColuna() + incrementoColuna);
+
+        while (!posicaoVerificacao.equals(proximaPosicao)) {
+            Peca pecaNoCaminho = tabuleiro.obterPecaEm(posicaoVerificacao);
+            if (pecaNoCaminho instanceof Animal && ((Animal) pecaNoCaminho).getTipoAnimal() == TipoAnimal.RATO) {
+                System.out.println("Movimento inválido: Rato bloqueando o salto.");
+                return false;
+            }
+            posicaoVerificacao = new Posicao(posicaoVerificacao.getLinha() + incrementoLinha,
+                                             posicaoVerificacao.getColuna() + incrementoColuna);
+        }
+
+        // Se o destino está vazio
+        if (pecaNoDestino == null) {
+            tabuleiro.moverPeca(animal, posicaoAtual, proximaPosicao);
+            return true;
+        }
+
+        // Se tem inimigo mais fraco
+        if (pecaNoDestino instanceof Animal) {
+            Animal alvo = (Animal) pecaNoDestino;
+            if (animal.getForca() >= alvo.getForca()) {
+                tabuleiro.moverPeca(animal, posicaoAtual, proximaPosicao);
+                return true;
+            } else {
+                System.out.println("Movimento inválido: O inimigo é mais forte.");
+                return false;
+            }
+        }
+
+        System.out.println("Movimento inválido: Posição final ocupada.");
+        return false;
+    }
+
+    private int calcularIncremento(int origem, int destino) {
+        if (destino < origem) return -1;
+        if (destino > origem) return 1;
+        return 0;
+    }
+}
+
+```
+**MovimentoRato.java**
+```java
+package jogo.strategy;
+
+import framework.model.Posicao;
+import framework.model.Tabuleiro;
+import framework.model.pecas.Peca;
+import framework.model.pecas.TipoAnimal;
+import framework.strategy.EstrategiaMovimento;
+import jogo.model.Animal;
+
+public class MovimentoRato implements EstrategiaMovimento {
+
+    @Override
+    public boolean mover(Peca peca, Posicao destino, Tabuleiro tabuleiro) {
+        Animal rato = (Animal) peca;
+
+        // Verifica se pode se mover para a posição destino (inclusive água)
+        if (!tabuleiro.estaDentroDosLimites(destino)) return false;
+
+        Peca alvo = tabuleiro.obterPecaEm(destino);
+
+        if (alvo == null) {
+            // Pode entrar na água ou em espaço vazio
+            tabuleiro.moverPeca(rato, rato.getPosicao(), destino);
+            return true;
+        }
+
+        // Se for atacar
+        if (alvo != null && alvo instanceof Animal) {
+            Animal alvoAnimal = (Animal) alvo;
+
+            // Rato não pode capturar elefante
+            if (alvoAnimal.getTipoAnimal() == TipoAnimal.ELEFANTE) {
+                System.out.println("Rato não pode capturar Elefante.");
+                return false;
+            }
+
+            // Verifica força
+            if (rato.getForca() >= alvoAnimal.getForca()) {
+                tabuleiro.moverPeca(rato, rato.getPosicao(), destino);
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+```
 ## 11. Command
 ## Intenção
 Controlar as chamadas a um determinado componente, no contexto desse framework, a movimentação, modelando cada requisição como um objeto. Permitir que as operações possam ser desfeitas, enfileiradas ou registradas.
