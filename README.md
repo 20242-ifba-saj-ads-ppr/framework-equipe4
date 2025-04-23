@@ -409,11 +409,74 @@ A implementação do padrão Abstract Factory na elaboração do framework de jo
 
 ### Cenário sem a aplicação do padrão
 
+Sem a Abstract Factory, o processo de criação de peças e tabuleiro seria disperso pelo código principal, com condicionais específicas para cada tipo de peça ou estilo de jogo.  Isso provoca um forte vínculo e rompe o princípio de aberto-fechado.
+
+**Diagrama UML (cenário sem o padrão):**
+
+```mermaid
+classDiagram
+    class Jogo {
+        -pecas: List~Peca~
+        -tabuleiro: Tabuleiro
+        +inicializar(): void
+    }
+
+    class Peca {
+        <<abstract>>
+    }
+
+    class Animal
+    class Tabuleiro
+    class SelvaTabuleiro
+
+    Jogo --> Peca
+    Jogo --> Tabuleiro
+    Animal --|> Peca
+    SelvaTabuleiro --|> Tabuleiro
+```
+
 ### Estrutura do padrão (GoF)
 ![image](https://github.com/user-attachments/assets/b52e0430-6654-4933-90a8-90cab894517b)
 
+### Classes envolvidas
+
+- **FabricaAbstrataJogo** → Interface da fábrica (AbstractFactory)
+- **SelvaJogoFactory** → Implementação concreta da fábrica (ConcreteFactory)
+- **Peca**, **Tabuleiro** → Interfaces dos produtos (AbstractProducts)
+- **Animal**, **SelvaTabuleiro** → Implementações concretas dos produtos (ConcreteProducts)
 ## Padrão aplicado no cenário
 
+**Diagrama UML (com o padrão aplicado):**
+
+```mermaid
+
+classDiagram
+    class FabricaAbstrataJogo {
+        <<interface>>
+        +criarPeca(jogador: Jogador, posicao: Posicao, forca: int, tipo: String): Peca
+        +criarTabuleiro(): Tabuleiro
+    }
+
+    class SelvaJogoFactory {
+        +criarPeca(jogador: Jogador, posicao: Posicao, forca: int, tipo: String): Peca
+        +criarTabuleiro(): Tabuleiro
+    }
+
+    class Peca {
+        <<interface>>
+    }
+
+    class Tabuleiro {
+        <<interface>>
+    }
+
+    class Animal
+    class SelvaTabuleiro
+
+    FabricaAbstrataJogo <|-- SelvaJogoFactory
+    Peca <|.. Animal
+    Tabuleiro <|.. SelvaTabuleiro
+```
 
 ### Participantes
 - **AbstractFactory (FabricaAbstratataJogo):** Define uma interface para criar uma família de peças e um tabuleiro.
@@ -422,6 +485,30 @@ A implementação do padrão Abstract Factory na elaboração do framework de jo
 - **ConcreteProduct (Animal, SelvaTabuleiro):** implementa a interface de Abstract Product.
 
 ### Descrição textual
+
+A interface FabricaAbstrataJogo estabelece os procedimentos para a elaboração das peças e do tabuleiro, assegurando que todos os jogos gerem elementos consistentes.  Cada implementação específica, como a SelvaJogoFactory, determina quais objetos particulares serão criados.  Isso possibilita a elaboração de variados estilos de jogo simplesmente alterando a fábrica empregada, mantendo o código do cliente separado.
+ 
+
+
+### Código (Framework)
+
+**FabricaAbstrataJogo.java**
+```java
+package framework.abstractFactory;
+
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.Tabuleiro;
+import framework.model.pecas.Peca;
+
+public interface FabricaAbstrataJogo {
+    Peca criarPeca(Jogador jogador, Posicao posicao, int forca, String tipo);
+    Tabuleiro criarTabuleiro();
+}
+```
+
+### Código (Jogo):
+
 
 
 ## 4. Singleton
