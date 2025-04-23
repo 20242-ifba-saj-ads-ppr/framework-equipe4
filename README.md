@@ -353,6 +353,30 @@ Construir famílias de peças para cada jogador sem especificar suas classes con
 - AbstractProduct ():
 - ConcreteProduct ():
 
+# Padrão Flyweight
+
+## Intenção
+Otimizar a criação e o gerenciamento de peças usando o padrão Flyweight economiza memória ao reutilizar instâncias de PecasJogador que compartilham o mesmo estado (cor). Em vez de criar múltiplas instâncias idênticas para peças do mesmo time, uma única instância é mantida no cache (FabricaPecasJogador) e compartilhada entre todas as peças com a mesma cor, como "branco" ou "preto". Isso reduz o uso de memória e simplifica o gerenciamento das peças no jogo.
+
+## Motivação
+
+**Diagrama UML (cenário sem o padrão):**
+
+### Estrutura do padrão (GoF)
+![image](https://github.com/user-attachments/assets/9a9b2c77-8e8a-42cf-9335-8d0f34b8d042)
+
+
+## Padrão aplicado no cenário
+
+## Participantes
+
+
+## Descrição Textual
+No contexto do padrão Flyweight, a interface PecasJogador atua como a classe Flyweight, representando os atributos compartilhados entre as peças que podem ser reutilizados. Nesse caso, a cor do jogador ("preto" ou "branco") é o principal estado compartilhado, tornando essa interface a base comum para todas as instâncias que possuem características idênticas e que podem ser reutilizadas sem necessidade de criar novas instâncias.  
+
+A FabricaPecasJogador é a Flyweight Factory, responsável por gerenciar as instâncias de PecasJogador. Ela garante que, para cada cor ("branco" ou "preto"), apenas uma instância de PecasBrancas ou PecasPretas será criada e compartilhada entre as peças. Ao solicitar uma peça com determinada cor, a fábrica verifica se já existe uma instância dessa cor em seu cache; se não, ela cria uma nova instância e a armazena para reutilização futura. Essa abordagem economiza recursos ao evitar a criação de múltiplas instâncias idênticas. 
+
+Assim, a FabricaPecasJogador trabalha em conjunto com as classes PecasBrancas e PecasPretas para implementar o padrão Flyweight, garantindo que o estado compartilhado seja gerenciado de forma eficiente, enquanto o estado variável de cada peça (como tipo ou símbolo) seja tratado separadamente. 
 
 # Padrão Facade
 
@@ -821,7 +845,7 @@ classDiagram
 - Invoker (GerenciadorComandos): Armazena e executa os comandos. Ele chama o executar() no comando e mantém uma lista para desfazer as ações.
 
  
-### Descrição textual
+## Descrição textual
 No código do jogo, o Command foi implementado para gerenciar os movimentos das peças no tabuleiro de forma que possam ser facilmente desfeitos e refeitos.
 
 A classe MoverCommand representa o comando específico para movimentar uma peça, interagindo com a classe Jogador e Peca, que atua como o receiver. A lógica de movimentação real da peça é realizada pelo Jogador, enquanto a Peca mantém sua posição no tabuleiro. Essa abstração permite que o jogo seja mais flexível e que o histórico de movimentos seja controlado.
