@@ -2,7 +2,7 @@
 
 # Padrões Criacionais
 
-## 1 Builder
+## 1. Builder
 
 ### Intenção
  Separar a construção de um objeto complexo da sua representação de modo que o
@@ -201,7 +201,7 @@ public class ConstrutorJogador implements BuilderJogador {
 COLOCAR
 
 
-## 2 Factory Method
+## 2. Factory Method
 
 ### Intenção  
 Definir uma interface para a criação de peças, permitindo que as subclasses decidam qual peça instanciar. Dessa maneira, a criação das peças ganha flexibilidade.
@@ -398,7 +398,7 @@ public class CriadorPecaSelvaConcreto implements FactoryMethodCriadorPeca {
 
 COLOCAR
 
-## 3 Abstract Factory
+## 3. Abstract Factory
 
 ### Intenção
 Construir famílias de peças para cada jogador sem especificar suas classes concretas.
@@ -422,7 +422,7 @@ Construir famílias de peças para cada jogador sem especificar suas classes con
 - **AbstractProduct ():**
 - **ConcreteProduct ():**
 
-## Singleton
+## 4. Singleton
 ### Intenção
 Garantir que o tabuleiro contendo o jogo selva tenha somente uma instância e fornecer um ponto global de acesso para ele.
 
@@ -581,7 +581,7 @@ COLOCAR
 # Padrões Estruturais
 
 
-## 5 Flyweight
+## 6. Flyweight
 
 ### Intenção
 Otimizar a criação e o gerenciamento de peças usando o padrão Flyweight economiza memória ao reutilizar instâncias de PecasJogador que compartilham o mesmo estado (cor). Em vez de criar múltiplas instâncias idênticas para peças do mesmo time, uma única instância é mantida no cache (FabricaPecasJogador) e compartilhada entre todas as peças com a mesma cor, como "branco" ou "preto". Isso reduz o uso de memória e simplifica o gerenciamento das peças no jogo.
@@ -606,7 +606,7 @@ A FabricaPecasJogador é a Flyweight Factory, responsável por gerenciar as inst
 
 Assim, a FabricaPecasJogador trabalha em conjunto com as classes PecasBrancas e PecasPretas para implementar o padrão Flyweight, garantindo que o estado compartilhado seja gerenciado de forma eficiente, enquanto o estado variável de cada peça (como tipo ou símbolo) seja tratado separadamente. 
 
-## 6 Facade
+## 7. Facade
 
 ### Intenção
 Fornecer uma interface unificada para um conjunto de interfaces em um subsistema. O Facade define uma interface de nível mais alto que torna o subsistema mais fácil de usar. – `GoF`
@@ -763,7 +763,7 @@ public interface RegrasJogoFacade {
 
 COLOCAR
 
-## 7 Adapter
+## 8. Adapter
 ### intenção
 Converter a interface de uma classe em outra interface, esperada pelos clientes. O
 Adapter permite que classes com interfaces incompatíveis trabalhem em conjunto –
@@ -779,7 +779,7 @@ o que, de outra forma, seria impossível.
 
 # Padrões Comportamentais
     
-## 8 State
+## 9. State
 
 ### Intenção
 Permite a um objeto alterar seu comportamento quando o seu estado interno muda. No contexto desse framework, o comportamento da movimentação de peças será alterado para só permitir que a peça do jogador atual seja movida.
@@ -895,7 +895,7 @@ public class GerenciadorTurnos {
 }
 ```
 
-## 9 Strategy
+## 10. Strategy
 ### Intenção
 Permitir de maneira simples a variação dos algoritmos utilizados na resolução de um determinado problema. No contexto desse framework, o Strategy está sendo utilizado para alterar o comportamento mover() do elefante e do rato, que possuem características de movimento e captura especiais.
 
@@ -912,7 +912,7 @@ Permitir de maneira simples a variação dos algoritmos utilizados na resoluçã
 
 
 
-## 10 Command
+## 11. Command
 ## Intenção
 Controlar as chamadas a um determinado componente, no contexto desse framework, a movimentação, modelando cada requisição como um objeto. Permitir que as operações possam ser desfeitas, enfileiradas ou registradas.
 
@@ -1097,7 +1097,7 @@ public class GerenciadorComandos {
 }
 
 ``` 
-## 11 Memento
+## 12. Memento
 
 ### Intenção 
 Sem violar o encapsulamento, salvar e carregar um estado interno de um objeto, de maneira que o objeto possa ser restaurado para esse estado mais tarde.
