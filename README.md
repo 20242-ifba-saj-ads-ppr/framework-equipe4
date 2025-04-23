@@ -485,10 +485,16 @@ classDiagram
 - **ConcreteProduct (Animal, SelvaTabuleiro):** implementa a interface de Abstract Product.
 
 ### Descrição textual
+A classe FabricaAbstrataJogo é uma interface que define um contrato para a criação de componentes essenciais do jogo, como peças (Peca) e tabuleiros (Tabuleiro). Essa abstração permite que diferentes implementações concretas forneçam variações específicas desses componentes, garantindo flexibilidade e modularidade no design do jogo. 
 
-A interface FabricaAbstrataJogo estabelece os procedimentos para a elaboração das peças e do tabuleiro, assegurando que todos os jogos gerem elementos consistentes.  Cada implementação específica, como a SelvaJogoFactory, determina quais objetos particulares serão criados.  Isso possibilita a elaboração de variados estilos de jogo simplesmente alterando a fábrica empregada, mantendo o código do cliente separado.
+No contexto do jogo Selva, a classe SelvaJogoFactory implementa a interface FabricaAbstrataJogo e é responsável por criar as peças e o tabuleiro específicos desse jogo. Através do método criarPeca, ela instancia peças do tipo Animal, que representam os elementos jogáveis do jogo, como gatos, cães, leões, etc. Já o método criarTabuleiro retorna uma instância de SelvaTabuleiro, que é uma adaptação específica para o tabuleiro do jogo Selva. 
  
+Criação de Peças:
+O método criarPeca da classe SelvaJogoFactory recebe parâmetros como o jogador associado à peça (Jogador), a posição inicial (Posicao), a força da peça (forca) e o tipo da peça (tipo). Com essas informações, ele cria uma instância de Animal, que encapsula as características e comportamentos das peças no jogo. 
 
+Criação do Tabuleiro:
+O método criarTabuleiro utiliza um adaptador (SelvaTabuleiroAdapter) para criar um tabuleiro específico para o jogo Selva. Esse adaptador é configurado com dimensões fixas (9x7) e encapsula a lógica necessária para gerenciar o estado do tabuleiro. A classe SelvaTabuleiro estende TabuleiroBase e utiliza o adaptador para interagir com o tabuleiro de forma adequada ao jogo. 
+     
 
 ### Código (Framework)
 
