@@ -1423,8 +1423,71 @@ public class Caretaker {
 # Construindo um Novo Jogo
 
 ## Passo a Passo para utilização do Framework
+### Passo 1 - Criar a Interface Central (Singleton)  
+Crie uma classe DamasGame que implementa a interface Game.
+Essa classe será responsável por gerenciar a configuração do jogo, como o tamanho do tabuleiro (largura e altura), quantidade máxima de jogadores e a quantidade máxima de peças
+Aplique o padrão Singleton para garantir que haja apenas uma instância da configuração do jogo: Defina um construtor privado.
+Implemente um método estático getInstance() para fornecer acesso global à instância única.
+Inclua métodos como getQuantidadeMaximaDeJogadores(), getQuantidadeMaximaDePecas(), getAlturaTabuleiro(), e getLarguraTabuleiro().
+     
 
+### Passo 2 - Criar o Tabuleiro e Peças (Abstract Factory)  
+Implemente o padrão Abstract Factory para criar o tabuleiro e as peças de Damas.
+Crie uma classe DamasJogoFactory que implementa FabricaAbstrataJogo:
+No método criarTabuleiro(), retorne uma instância de TabuleiroDamas, configurada com dimensões 8x8.
+No método criarPeca(Jogador jogador, Posicao posicao, int forca, String tipo), crie instâncias de PecaDama com características específicas: Peças brancas nas três primeiras linhas. Peças pretas nas três últimas linhas.
+Casas alternadas entre válidas e inválidas.
+             
+         
+Use o Adapter TabuleiroAdapter para encapsular a lógica específica do tabuleiro de Damas, como validação de movimentos e limites.
+     
 
+### Passo 3 - Otimizar a Criação de Peças (Flyweight)  
+Utilize o padrão Flyweight para otimizar o uso de memória ao criar peças.
+Crie uma classe PecaFlyweightFactory que armazena instâncias reutilizáveis de peças com características compartilhadas (como cor e símbolo).
+Reutilize essas instâncias sempre que possível para evitar duplicação de objetos.
+Exemplo:
+Uma única instância de "peça branca" é compartilhada entre todas as peças brancas.
+Uma única instância de "peça preta" é compartilhada entre todas as peças pretas.
+
+### Passo 4 - Definir o Comportamento das Peças (Strategy)  
+Use o padrão Strategy para definir diferentes comportamentos de movimentação e captura:
+Crie uma interface MovimentoStrategy com métodos como mover() e capturar().
+Implemete classes concretas como:
+MovimentoDamaNormal: Movimentação básica para frente.
+MovimentoDamaPromovida: Movimentação em qualquer direção após promoção.
+crie lógica para os outros comportamentos que diferem do básico, implementando a interface MovimentoStrategy, para que não de conflito no restante do codigo.
+
+### Passo 5 - Gerenciar o Estado do Jogo (State)  
+Implemente o padrão State para gerenciar os turnos dos jogadores:
+Crie classes como TurnoJogadorBranco e TurnoJogadorPreto.
+Alterne entre os estados conforme os jogadores realizam suas jogadas.
+Cada estado deve encapsular a lógica específica para o jogador atual, como validar movimentos e verificar condições de vitória.
+     
+
+### Passo 6 - Salvar e Restaurar Estados (Memento)  
+Use o padrão Memento para salvar e restaurar o estado do jogo:
+Crie uma classe EstadoJogoMemento que armazena: A posição de todas as peça, o jogador atual.
+Use um Caretaker para gerenciar o histórico de estados e permitir funcionalidades de desfazer/refazer.
+Exemplo:
+Quando um jogador realiza uma jogada, o estado atual é salvo no Caretaker.
+Para desfazer, restaure o último estado salvo.
+         
+     
+### Passo 7 - Simplificar a Interação com o Jogo (Facade)  
+Crie uma classe DamasFacade que implementa RegrasJogoFacade: encapsule a lógica de validação de movimentos, capturas e controle de turnos.
+Forneça métodos simples para o cliente interagir com o jogo:
+movimentoValido(Peca peca, Posicao destino)
+capturaValida(Peca atacante, Peca defensor)
+verificarVencedor()
+passarTurno()
+
+### Passo 8 - Gerenciar Histórico de Jogadas (Command)  
+Implemente o padrão Command para gerenciar o histórico de jogadas:
+Crie uma classe MoverPecaDamaCommand que implementa Command.
+Encapsule cada movimento como um objeto independente, permitindo funcionalidades como desfazer e refazer.
+Use um GerenciadorComandos para armazenar o histórico de comandos.
+     
 
 # Referências
 GAMMA, Erich. et al. Padrões de projetos: Soluções reutilizáveis de software orientados a objetos Bookman editora, 2009.
