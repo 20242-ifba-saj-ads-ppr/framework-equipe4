@@ -661,7 +661,7 @@ o que, de outra forma, seria impossível.
 ![image](https://github.com/user-attachments/assets/f0dd9d9e-3676-4e67-8fbe-805ff1ce832f)
 
 
-#Padrões Comportamentais
+# Padrões Comportamentais
     
 ## State
 
@@ -781,7 +781,7 @@ public class GerenciadorTurnos {
 
 ## Strategy
 ### Intenção
-Permitir de maneira simples a variação dos algoritmos utilizados na resolução de um determinado problema. No contexto desse framework, o Strategy está sendo utilizado para alterar o comportamento move() do elefante e do rato, que possuem características de movimento e captura especiais.
+Permitir de maneira simples a variação dos algoritmos utilizados na resolução de um determinado problema. No contexto desse framework, o Strategy está sendo utilizado para alterar o comportamento mover() do elefante e do rato, que possuem características de movimento e captura especiais.
 
 ### Motivação
 
