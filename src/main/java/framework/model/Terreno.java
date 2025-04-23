@@ -6,10 +6,12 @@ public class Terreno {
     private int linhas;
     private int colunas;
     private TipoTerrenoEnum tipoTerreno;
-    private Peca peca;
+    private Peca peca = null;
 
-    public Peca getPeca() {
-        return peca;
+    public Terreno(int linhas, int colunas) {
+        this.linhas = linhas;
+        this.colunas = colunas;
+        this.tipoTerreno = TipoTerrenoEnum.COMUM;
     }
 
     public Terreno(int linhas, int colunas, TipoTerrenoEnum tipoTerreno) {
@@ -42,11 +44,12 @@ public class Terreno {
         this.tipoTerreno = tipoTerreno;
     }
 
-    public String getSimbolo() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getSimbolo'");
+    public Peca getPeca() {
+        return peca;
     }
 
-    
+    public void setPeca(Peca peca) {
+        this.peca = peca;
+    }
 }
 
