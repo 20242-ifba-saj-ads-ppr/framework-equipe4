@@ -1,7 +1,7 @@
 package framework.model;
 
-import java.util.List;
 import framework.model.pecas.Peca;
+import java.util.List;
 
 
 public interface Tabuleiro {
@@ -11,4 +11,6 @@ public interface Tabuleiro {
     // Peca encontraPecaPorSimbolo(String simbolo);
     Terreno obterTerrenoEm(Posicao posicao);
     void inicializaTerrenoPecas(List<Jogador> jogadores);
+
+    void moverPeca(Peca peca, Posicao origem, Posicao destino);
 }

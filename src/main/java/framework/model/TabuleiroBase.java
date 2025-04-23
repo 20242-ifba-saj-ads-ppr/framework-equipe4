@@ -1,9 +1,8 @@
 package framework.model;
 
-import java.util.List;
-
 import framework.adapter.TabuleiroAdapter;
 import framework.model.pecas.Peca;
+import java.util.List;
 
 public class TabuleiroBase implements Tabuleiro {
     private TabuleiroAdapter adapter;
@@ -49,4 +48,9 @@ public class TabuleiroBase implements Tabuleiro {
         adapter.inicializaTerrenoPecas(jogadores);
     }
    
+    @Override
+    public void moverPeca(Peca peca, Posicao origem, Posicao destino) {
+        definirCasa(origem, null);
+        definirCasa(destino, peca);
+    }
 }

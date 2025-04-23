@@ -15,7 +15,7 @@ public class SelvaJogoFactory implements FabricaAbstrataJogo {
     public Peca criarPeca(Jogador jogador, Posicao posicao, int forca, String tipo) {
         Peca peca = new Animal(tipo, forca, jogador, posicao);
         return peca;
-    }
+    };
 
     @Override
     public Tabuleiro criarTabuleiro() {

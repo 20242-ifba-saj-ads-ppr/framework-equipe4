@@ -1,15 +1,13 @@
 package jogo.adapter;
 
+import framework.abstractFactory.FabricaAbstrataJogo;
+import framework.adapter.TabuleiroAdapter;
 import framework.model.Jogador;
 import framework.model.Posicao;
 import framework.model.Terreno;
 import framework.model.pecas.Peca;
-import jogo.abstractFactory.SelvaJogoFactory;
-
 import java.util.List;
-
-import framework.abstractFactory.FabricaAbstrataJogo;
-import framework.adapter.TabuleiroAdapter;
+import jogo.abstractFactory.SelvaJogoFactory;
 
 public class SelvaTabuleiroAdapter implements TabuleiroAdapter {
     private Terreno[][] terrenos; // talvez fazer uso de um set ao inves de matriz
@@ -41,9 +39,8 @@ public class SelvaTabuleiroAdapter implements TabuleiroAdapter {
 
     @Override
     public void definirCasa(Posicao posicao, Peca peca) {
-        // Verifica se a posição está dentro dos limites do tabuleiro
         if (!estaDentroDosLimites(posicao)) {
-            throw new IllegalArgumentException("ERRO: A posição indicada está fora dos limites do tabuleiro.");
+            throw new IllegalArgumentException("Posição ["+posicao.getLinha()+","+posicao.getColuna()+"] fora do tabuleiro");
         }
 
         // Define a peça na posição especificada
@@ -80,11 +77,11 @@ public class SelvaTabuleiroAdapter implements TabuleiroAdapter {
         }
 
         int[][][] matrizPosicoesPecas = {
-            { // posicao inicial das peças do jogador 1
-                { 1, 1 }, { 3, 1 }, { 1, 7 }, { 3, 3 }, { 2, 2 }, { 5, 5 }, { 2, 6 }, { 3, 7 }
+            { // Jogador 1 (linhas 0-8, colunas 0-6)
+                {1, 1}, {3, 1}, {1, 5}, {3, 3}, {2, 2}, {5, 5}, {2, 4}, {3, 5}
             },
-            { // posicao inicial das peças do jogador 2
-                { 9, 7 }, { 7, 7 }, { 9, 1 }, { 7, 7 }, { 8, 6 }, { 7, 3 }, { 2, 6 }, { 7, 1 }
+            { // Jogador 2
+                {7, 5}, {5, 5}, {7, 1}, {5, 3}, {6, 4}, {5, 1}, {6, 2}, {5, 5}
             }
         };
         String[] animaisNome = { "LEAO", "RATO", "TIGRE", "LEOPARDO", "CAO", "LOBO", "GATO", "ELEFANTE" };
