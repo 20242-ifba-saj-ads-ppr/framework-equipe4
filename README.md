@@ -9,73 +9,82 @@
  mesmo processo de construção possa criar diferentes representações - `GOF`
 
 ### Motivação
+Um problema que enfrentamos durante o desenvolvimento foi a criação do objeto Jogador, que exigia várias validações e etapas de configuração para garantir consistência. Era necessário assegurar que o nome e a cor fossem sempre válidos (não nulos ou vazios) e que os pontos não fossem negativos. Sem uma abordagem estruturada, acabamos com construtores sobrecarregados e código repetitivo de validação, além do risco de criar jogadores em estados inconsistentes, como sem nome ou cor definidos. 
 
+Para resolver isso, adotamos o padrão Builder . Ele organiza a construção do Jogador em etapas claras, centralizando as validações no ConstrutorJogado. Com o DiretorJogador, conseguimos encapsular regras específicas de criação, tornando o processo mais flexível e reutilizável. Agora, o Builder garante que o Jogador seja sempre criado de forma válida, eliminando complexidades e reduzindo erros.
 ### Cenário sem a aplicação do padrão
-
-Durante o desenvolvimento de jogos, a criação de objetos como por exemplo Jogador pode ser complexa quando envolve múltiplos atributos e validações. Sem a aplicação do padrão Builder, ao realizar o instanciamento de um jogador seria feita diretamente através de um construtor com múltiplos parâmetros:
-
-```java
-Jogador jogador = new Jogador("Carlos", "Azul", 100);
-```
 
 **Diagrama UML (cenário sem o padrão):**
 
 ```mermaid
-   
+   classDiagram
+    class Jogador {
+        -nome: String
+        -cor: String
+        -pontos: int
+        +Jogador(nome: String, cor: String, pontos: int)
+        +setNome(nome: String)
+        +setCor(cor: String)
+        +setPontos(pontos: int)
+        +getNome(): String
+        +getCor(): String
+        +getPontos(): int
+    }
+
+    class CenarioSemBuilder {
+        +main(args: String[])
+    }
+
+    CenarioSemBuilder --> Jogador
 ```
 
 ### Estrutura do padrão (GOF)
 
 ![image](https://github.com/20242-ifba-saj-ads-ppr/framework-equipe4/blob/1820c78e4b0b87f6eef921bfccb0392333f999a6/imagem/imagebuilder.png)
 
-### Padrão aplicado no cenário
-
-Aplicando o padrão Builder, a criação de Jogador é realizada passo a passo o que permiti a configuração de atributos obrigatórios e opcionais de uma forma clara e mais segura. O ConstrutorJogador implementa a interface BuilderJogador, fornecendo métodos para definir cada atributo. O DiretorJogador organiza a construção, garantindo que todas as etapas sejam seguidas de forma correta.
-
-#### Classes envolvidas
-
-- BuilderJogador    **-->** Interface 
-- ConstrutorJogador **-->** Builder Concretos 
-- DiretorJogador    **-->** Diretor
-- Jogador           **-->** Objeto final
 
 **Diagrama UML (cenário com o padrão):**
 
 ```mermaid
 classDiagram
-	class BuilderJogador {
-		<<interface>>
-		+configurarNome(String nome)
-		+configurarCor(String cor)
-		+configurarPontos(int pontos)
-		+construir(): Jogador
-	}
+    class BuilderJogador {
+        <<interface>>
+        +configurarNome(nome: String)
+        +configurarCor(cor: String)
+        +configurarPontos(pontos: int)
+        +construir(): Jogador
+    }
 
-	class ConstrutorJogador {
-		-Jogador jogador
-		+configurarNome(String nome)
-		+configurarCor(String cor)
-		+configurarPontos(int pontos)
-		+construir(): Jogador
-	}
+    class DiretorJogador {
+        -construtor: BuilderJogador
+        +DiretorJogador(construtor: BuilderJogador)
+        +criarJogador(nome: String, cor: String, pontos: int): Jogador
+    }
 
-	class DiretorJogador {
-		-BuilderJogador construtor
-		+criarJogador(String nome, String cor, int pontos): Jogador
-	}
+    class ConstrutorJogador {
+        -jogador: Jogador
+        +ConstrutorJogador()
+        +configurarNome(nome: String)
+        +configurarCor(cor: String)
+        +configurarPontos(pontos: int)
+        +construir(): Jogador
+    }
 
-	class Jogador {
-		-String nome
-		-String cor
-		-int pontos
-		+getNome(): String
-		+getCor(): String
-		+getPontos(): int
-	}
+    class Jogador {
+        -nome: String
+        -cor: String
+        -pontos: int
+        +setNome(nome: String)
+        +setCor(cor: String)
+        +setPontos(pontos: int)
+        +getNome(): String
+        +getCor(): String
+        +getPontos(): int
+    }
 
-	BuilderJogador <|.. ConstrutorJogador
-	ConstrutorJogador --> Jogador
-	DiretorJogador --> BuilderJogador
+    BuilderJogador <|-- ConstrutorJogador
+    DiretorJogador --> BuilderJogador
+    ConstrutorJogador --> Jogador
 ```
 
 ### Participantes
@@ -88,9 +97,23 @@ classDiagram
 
 - Product (Jogador): O objeto complexo que está sendo construído.
 
+### Descrição Textual
+A interface BuilderJogador define os métodos necessários para a construção de um objeto Jogador em um jogo. Esta interface age como um contrato, especificando as operações fundamentais que um construtor de jogadores deve implementar.
+Ela segue o princípio da separação de responsabilidades, isolando as ações de configuração e construção do jogador. Isso permite que diferentes implementações de BuilderJogador possam criar jogadores de formas variadas sem alterar a estrutura básica da classe Jogador (o produto que desejamos gerar).
+
+A classe DiretorJogador é responsável por controlar o processo de construção de um jogador. Ela recebe uma instância de BuilderJogador e utiliza essa instância para construir jogadores conforme as regras específicas de configuração. 
+O método criarJogador(String nome, String cor, int pontos) encapsula a lógica de criação de um jogador, garantindo que todas as etapas de configuração sejam executadas de forma consistente. Ele delega as chamadas de configuração para o BuilderJogador fornecido, permitindo que diferentes implementações de construtores possam ser usadas sem alterar o comportamento do diretor.
+
+A classe ConstrutorJogador é uma implementação concreta da interface BuilderJogador. Esta classe implementa todos os métodos da interface e contém a lógica real para construir o objeto Jogador.
+No método configurarNome, o nome do jogador é validado para garantir que não seja nulo ou vazio antes de ser atribuído. O método configurarCor realiza uma validação semelhante para a cor do jogador. Já o método configurarPontos verifica se os pontos são não negativos antes de serem atribuídos.
+
+O método construir valida se o jogador possui tanto um nome quanto uma cor configurados antes de retornar o objeto construído. Essa validação garante que o jogador esteja em um estado consistente antes de ser utilizado.
+
+Este padrão simplifica o processo de criação para o usuário final, que pode simplesmente chamar o método criarJogador e obter um jogador completamente configurado.
+
 ### Código (Framework)
 
-**BuilderJogador**
+**BuilderJogador.java**
 
 ```java
 package builder;
@@ -105,7 +128,7 @@ public interface BuilderJogador {
 }
 ```
 
-**DiretorJogador**
+**DiretorJogador.java**
 
 ```java
 package builder;
@@ -128,7 +151,53 @@ public class DiretorJogador {
 	}
 }
 ```
+**ConstrutorJogador.java**
+```java
+package jogo.builder;
 
+import framework.model.Jogador;
+import framework.builder.BuilderJogador;
+
+public class ConstrutorJogador implements BuilderJogador {
+    private Jogador jogador;
+
+    public ConstrutorJogador() {
+        this.jogador = new Jogador();
+    }
+
+    @Override
+    public void configurarNome(String nome) {
+        if (nome == null || nome.isEmpty()) {
+            throw new IllegalArgumentException("O nome do jogador não pode ser nulo ou vazio.");
+        }
+        jogador.setNome(nome);
+    }
+
+    @Override
+    public void configurarCor(String cor) {
+        if (cor == null || cor.isEmpty()) {
+            throw new IllegalArgumentException("A cor do jogador não pode ser nula ou vazia.");
+        }
+        jogador.setCor(cor);
+    }
+
+    @Override
+    public void configurarPontos(int pontos) {
+        if (pontos < 0) {
+            throw new IllegalArgumentException("Os pontos do jogador não podem ser negativos.");
+        }
+        jogador.setPontos(pontos);
+    }
+
+    @Override
+    public Jogador construir() {
+        if (this.jogador.getNome() == null || this.jogador.getCor() == null) {
+            throw new IllegalStateException("Nome e cor são obrigatórios");
+        }
+        return jogador;
+    }
+}
+```
 
 
 ### Código (Jogo): 
