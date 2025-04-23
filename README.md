@@ -19,34 +19,6 @@ Jogador jogador = new Jogador("Carlos", "Azul", 100);
 **Diagrama UML (cenário sem o padrão):**
 
 ```mermaid
-classDiagram
-    class Peca {
-        <<abstract>>
-        -tipo: String
-        -forca: int
-        -jogador: Jogador
-        -posicao: Posicao
-    }
-
-    class TipoAnimal {
-        <<enumeration>>
-        GATO
-        CACHORRO
-        ELEFANTE
-        LEOPARDO
-        LEAO
-        RATO
-        TIGRE
-        LOBO
-    }
-
-    class Jogo {
-        -pecas: List~Peca~
-        +criarPeca(TipoAnimal, Posicao, Jogador): Peca
-    }
-
-    Peca --> TipoAnimal
-    Jogo --> Peca
    
 ```
 
@@ -179,19 +151,33 @@ O que acaba dificultando a manutenção e a expansão, tornando mais difícil mu
 
 ```mermaid
 classDiagram
-    class Cliente {
-        +criarPeca()
+    class Peca {
+        <<abstract>>
+        -tipo: String
+        -forca: int
+        -jogador: Jogador
+        -posicao: Posicao
     }
 
-    class Leao {
-        +Leao(Posicao posicao, Jogador jogador)
+    class TipoAnimal {
+        <<enumeration>>
+        GATO
+        CACHORRO
+        ELEFANTE
+        LEOPARDO
+        LEAO
+        RATO
+        TIGRE
+        LOBO
     }
 
-    class Posicao
-    class Jogador
+    class Jogo {
+        -pecas: List~Peca~
+        +criarPeca(TipoAnimal, Posicao, Jogador): Peca
+    }
 
-    Cliente --> Leao
-```
+    Peca --> TipoAnimal
+    Jogo --> Peca
 
 ---
 
