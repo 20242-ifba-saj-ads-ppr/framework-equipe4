@@ -650,7 +650,7 @@ classDiagram
 
 ### Participantes
 - **Prototype (PecaPrototype)** Interface para clonagem de si mesmo.
-- **ConcretePrototype (ex: Tigre, Rato):** Implementa a clonagem de si mesmo, retornando uma nova instância com o mesmo estado.
+- **ConcretePrototype (Animal):** Implementa a clonagem de si mesmo, retornando uma nova instância com o mesmo estado.
 - **Client:** Usa o protótipo para clonar novos objetos sem depender diretamente de suas classes concretas.
 
 
@@ -679,24 +679,63 @@ COLOCAR
 
 # Padrões Estruturais
 
-
 ## 6. Flyweight
 
 ### Intenção
 Otimizar a criação e o gerenciamento de peças usando o padrão Flyweight economiza memória ao reutilizar instâncias de PecasJogador que compartilham o mesmo estado (cor). Em vez de criar múltiplas instâncias idênticas para peças do mesmo time, uma única instância é mantida no cache (FabricaPecasJogador) e compartilhada entre todas as peças com a mesma cor, como "branco" ou "preto". Isso reduz o uso de memória e simplifica o gerenciamento das peças no jogo.
 
 ### Motivação
+Imagine um sistema que precisa gerenciar milhares de objetos com características repetidas, como cores. Criar uma nova instância para cada objeto seria ineficiente e consumiria muita memória. O padrão Flyweight  resolve isso ao compartilhar estados comuns (como a cor) entre os objetos, criando apenas uma instância para cada estado e reutilizando-a sempre que necessário, reduzindo o uso de recursos e melhorando o desempenho. 
 
 **Diagrama UML (cenário sem o padrão):**
+``` mermaid
+classDiagram
+    class Peca {
+        -cor: String
+        +getCor(): String
+    }
 
+    class Sistema {
+        -pecas: List~Peca~
+        +criarPecas(): void
+    }
+
+    Sistema --> Peca : contém
+``` 
 ### Estrutura do padrão (GoF)
 ![image](https://github.com/user-attachments/assets/9a9b2c77-8e8a-42cf-9335-8d0f34b8d042)
 
 
 ### Padrão aplicado no cenário
+``` mermaid
+classDiagram
+    class PecasJogador {
+        <<interface>>
+        +getCor(): String
+    }
+
+    class PecasBrancas {
+        +getCor(): String
+    }
+
+    class PecasPretas {
+        +getCor(): String
+    }
+
+    class FabricaPecasJogador {
+        -cachePecas: Map~String, PecasJogador~
+        +getPecasJogador(cor: String): PecasJogador
+    }
+
+    PecasJogador <|.. PecasBrancas
+    PecasJogador <|.. PecasPretas
+    FabricaPecasJogador --> PecasJogador
+````
 
 ### Participantes
-
+- **Flyweight (PecasJogador):** Define a interface que todas as peças (flyweights) devem implementar.
+- **Concrete Flyweight (PecasBrancas, PecasPretas):** Implementa a interface Flyweight e compartilha os dados internos. São as cores que serão reutilizados e compartilhados entre vários contextos.
+- **Flyweight Factory (FabricaPecasJogador):** É responsável por criar e gerenciar os objetos branco e preto. A fábrica garante que as cores dos jogadores sejam compartilhadas adequadamente, retornando uma instância existente sempre que possível.
 
 ### Descrição Textual
 No contexto do padrão Flyweight, a interface PecasJogador atua como a classe Flyweight, representando os atributos compartilhados entre as peças que podem ser reutilizados. Nesse caso, a cor do jogador ("preto" ou "branco") é o principal estado compartilhado, tornando essa interface a base comum para todas as instâncias que possuem características idênticas e que podem ser reutilizadas sem necessidade de criar novas instâncias.  
@@ -713,15 +752,7 @@ Fornecer uma interface unificada para um conjunto de interfaces em um subsistema
 
 ### Motivação
 
-### Cenário sem a aplicação do padrão
 
-Sem o uso do padrão Facade, o código cliente precisa interagir diretamente com diversos componentes internos do jogo, como o controle de turnos, as regras de movimentação e captura. Isso gera um forte acoplamento e maior complexidade no código:
-
-```java
-if (peca.podeMover(destino) && regrasJogo.capturaValida(peca, inimigo)) {
-    gerenciadorTurnos.proximoTurno();
-}
-```
 
 Nesse cenário, o cliente precisa conhecer múltiplas classes e suas interações internas, o que torna a manutenção e a extensão do sistema mais difíceis.
 
