@@ -1,7 +1,8 @@
 package jogo;
 
-import framework.command.MoverCommand;
-import framework.command.InvocadorComandos;
+import framework.command.*;
+import framework.abstractFactory.*;
+import framework.builder.*;
 import framework.model.Posicao;
 import jogo.model.Animal;
 import jogo.strategy.MovimentoRato;
@@ -12,6 +13,11 @@ public class Main {
     public static void main(String[] args) {
         // 1. Inicializa o jogo
         JogoSelva jogo = new JogoSelva(); // Supondo que essa classe cria tabuleiro, jogadores e peças
+        // FabricaAbstrataJogo tabuleiroFactory = new SelvaTabuleiroFactory();
+        // TabuleiroSelva tabuleiro = tabuleiroFactory.criarTabuleiro();
+        // A FAZER: lista de jogadores correta
+        // var listaJogadores = new ArrayList<Jogador>();
+        // tabuleiro.inicializaTerrenoPecas(listaJogadores);
 
         // 2. Configura as estratégias de movimento para cada peça
         for (Animal animal : jogo.getAnimais()) {

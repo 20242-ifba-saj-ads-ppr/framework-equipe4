@@ -13,12 +13,6 @@ public class Jogador {
         this.cor = "";
         this.pontos = 0;
     }
-    
-    // public Jogador(String nome, String cor) {
-    //     this.nome = nome;
-    //     this.cor = cor;
-    //     this.pontos = 0;
-    // }
 
     public String getNome() {
         return nome;

@@ -1,9 +1,8 @@
 package framework.model;
 
 public enum TipoTerrenoEnum {
-    INICIAL,
+    COMUM,
     AGUA,
     TOCA,
     ARMADILHA;
-
 }
