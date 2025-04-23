@@ -207,6 +207,9 @@ COLOCAR
 Definir uma interface para a criação de peças, permitindo que as subclasses decidam qual peça instanciar. Dessa maneira, a criação das peças ganha flexibilidade.
 
 ### Motivação
+No desenvolvimento de um jogo, a criação direta de peças na classe principal gera problemas ao adicionar novos tipos de animais. Sem um padrão, o código acumula condicionais (if/else ou switch) para lidar com cada tipo, tornando-o rígido, acoplado e difícil de manter. 
+
+O Factory Method  resolve isso encapsulando a lógica de criação em subclasses ou implementações específicas. Assim, novos tipos de peças podem ser adicionados sem alterar o código existente, apenas criando novas fábricas ou subclasses.
 
 ### Cenário sem a aplicação do padrão
 
