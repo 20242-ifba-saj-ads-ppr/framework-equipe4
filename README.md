@@ -444,9 +444,31 @@ public class CriadorPecaSelvaConcreto implements FactoryMethodCriadorPeca {
 ### Código (Jogo)
 **CriadorPeça.java**
 ```java
+package framework.factoryMethod;
+
+
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.pecas.Peca;
+
+public interface CriadorPeca {
+    Peca fabricar(Posicao posicao, Jogador jogador);
+}
+
 ```
-**Factory.java**
+**FactoryMethodCriadorPeca.java**
 ```java
+package framework.factoryMethod;
+
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.pecas.Peca;
+import framework.model.pecas.TipoAnimal;
+
+public interface FactoryMethodCriadorPeca extends CriadorPeca {
+    Peca fabricar(Posicao posicao, Jogador jogador, TipoAnimal animal);
+}
+
 ```
 
 ## 3. Abstract Factory
@@ -564,8 +586,38 @@ public interface FabricaAbstrataJogo {
 }
 ```
 
-### Código (Jogo):
+### Código (Framework)
 
+**CriadorPeca.java**
+
+```java
+package jogo.abstractFactory;
+
+import framework.abstractFactory.FabricaAbstrataJogo;
+import framework.adapter.TabuleiroAdapter;
+import framework.model.pecas.Peca;
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.Tabuleiro;
+import jogo.model.Animal;
+import jogo.model.SelvaTabuleiro;
+import jogo.adapter.SelvaTabuleiroAdapter;
+
+public class SelvaJogoFactory implements FabricaAbstrataJogo {
+    @Override
+    public Peca criarPeca(Jogador jogador, Posicao posicao, int forca, String tipo) {
+        Peca peca = new Animal(tipo, forca, jogador, posicao);
+        return peca;
+    };
+
+    @Override
+    public Tabuleiro criarTabuleiro() {
+        TabuleiroAdapter selvaTabuleiroAdapter = new SelvaTabuleiroAdapter(9, 7);
+        Tabuleiro selvaTabuleiro = new SelvaTabuleiro(selvaTabuleiroAdapter);
+        return selvaTabuleiro;
+    }
+}
+```
 
 
 ## 4. Singleton
@@ -723,10 +775,6 @@ public interface PecaPrototype extends Cloneable {
     void setJogador(Jogador jogador);
 }
 ```
-
-### Código (Jogo):
-
-COLOCAR
 
 # Padrões Estruturais
 
@@ -941,8 +989,73 @@ public interface RegrasJogoFacade {
 ```
 
 ### Código (Jogo): 
+**RegrasJogoFacadeImpl.java**
+```java
+package jogo.facade;
 
-COLOCAR
+import framework.facade.GerenciadorTurnos;
+import framework.facade.RegrasJogoFacade;
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.Tabuleiro;
+import framework.model.pecas.Peca;
+import framework.model.pecas.TipoAnimal;
+import jogo.model.Animal;
+
+public  abstract class RegrasJogoFacadeImpl implements RegrasJogoFacade {
+    private final Tabuleiro tabuleiro;
+    private final GerenciadorTurnos gerenciadorTurnos;
+    
+
+    public RegrasJogoFacadeImpl(Tabuleiro tabuleiro) {
+        this.tabuleiro = tabuleiro;
+        this.gerenciadorTurnos = new GerenciadorTurnos(null);
+    }
+
+    @Override
+    public abstract boolean movimentoValido(Peca peca, Posicao destino);
+
+    @Override
+    public boolean capturaValida(Peca atacante, Peca defensor){
+        Animal atacanteConvertido = (Animal) atacante;
+        Animal defensorConvertido = (Animal) defensor;
+        TipoAnimal tipoAtacante = atacanteConvertido.getTipoAnimal();
+        TipoAnimal tipoDefensor = defensorConvertido.getTipoAnimal();
+
+
+        // Regra: O rato pode capturar o elefante
+        if (tipoAtacante == TipoAnimal.RATO && tipoDefensor == TipoAnimal.ELEFANTE) {
+            return true;
+        }
+
+        // Regra: O elefante não pode capturar o rato
+        if (tipoAtacante == TipoAnimal.ELEFANTE && tipoDefensor == TipoAnimal.RATO) {
+            return false;
+        }
+
+        // Regra: Comparação de força
+        return tipoAtacante.getForca() > tipoDefensor.getForca();
+    }
+    
+
+    @Override
+    public Jogador verificarVencedor() {
+        throw new UnsupportedOperationException("Unimplemented method 'verificarVencedor'");
+    }
+
+    @Override
+    public void passarTurno() {
+        gerenciadorTurnos.proximoTurno();    
+    }
+
+    @Override
+    public Jogador getJogadorAtual() {
+        return gerenciadorTurnos.getJogadorAtual();    
+    }
+    
+}
+
+```
 
 ## 8. Adapter
 
@@ -1007,7 +1120,7 @@ classDiagram
     TabuleiroSelvaAdapter --> SelvaTabuleiro
 ```
 
----
+
 
 ### Participantes
 
@@ -1016,7 +1129,7 @@ classDiagram
 - **Adaptee (SelvaTabuleiro):** Classe existente com uma interface original e específica.
 - **Client:** Usa o TabuleiroAdapter para interagir com qualquer tipo de tabuleiro.
 
----
+
 
 ### Descrição textual
 
@@ -1024,7 +1137,7 @@ A interface TabuleiroAdapter estabelece os procedimentos esperados pelo framewor
  
  O adapter é uma implementação tangível da classe TabuleiroSelvaAdapter.  Ela tem uma representação do SelvaTabuleiro e converte cada chamada à interface prevista (TabuleiroAdapter) para as operações efetivas do SelvaTabuleiro.  Este procedimento de tradução garante que o restante do código opere sem alterações, independentemente da variação na estrutura do tabuleiro entre os jogos.
 
----
+
 
 ### Código (Framework)
 
@@ -1048,9 +1161,114 @@ public interface TabuleiroAdapter {
 }
 ```
 
-### Código (Jogo)
 
+### Código (Jogo): 
+**SelvaTabuleiroAdapter.java**
 
+```java
+package jogo.adapter;
+
+import framework.abstractFactory.FabricaAbstrataJogo;
+import framework.adapter.TabuleiroAdapter;
+import framework.model.Jogador;
+import framework.model.Posicao;
+import framework.model.Terreno;
+import framework.model.pecas.Peca;
+import java.util.List;
+import jogo.abstractFactory.SelvaJogoFactory;
+
+public class SelvaTabuleiroAdapter implements TabuleiroAdapter {
+    private Terreno[][] terrenos; // talvez fazer uso de um set ao inves de matriz
+
+    public SelvaTabuleiroAdapter(int linhas, int colunas) {
+        terrenos = new Terreno[linhas][colunas];
+        for (int i = 0; i < linhas; i++) {
+            for (int j = 0; j < colunas; j++) {
+                terrenos[i][j] = new Terreno(i, j);
+            }
+        }
+    }
+
+    @Override
+    public String getDescricaoTerreno(Posicao posicao) {
+        if (posicao.getLinha() < 0 || posicao.getLinha() >= terrenos.length || posicao.getColuna() < 0
+                || posicao.getColuna() >= terrenos[0].length) {
+            throw new IllegalArgumentException("Posição inválida no tabuleiro.");
+        }
+        return terrenos[posicao.getLinha()][posicao.getColuna()].getTipoTerreno().toString();
+    }
+
+    @Override
+    public boolean estaDentroDosLimites(Posicao posicao) {
+        int linha = posicao.getLinha();
+        int coluna = posicao.getColuna();
+        return linha >= 0 && linha < terrenos.length && coluna >= 0 && coluna < terrenos[0].length;
+    }
+
+    @Override
+    public void definirCasa(Posicao posicao, Peca peca) {
+        if (!estaDentroDosLimites(posicao)) {
+            throw new IllegalArgumentException("Posição ["+posicao.getLinha()+","+posicao.getColuna()+"] fora do tabuleiro");
+        }
+
+        // Define a peça na posição especificada
+        int linha = posicao.getLinha();
+        int coluna = posicao.getColuna();
+
+        terrenos[linha][coluna].setPeca(peca);
+    }
+
+    @Override
+    public Peca obterPecaEm(Posicao posicao) {
+        if (!estaDentroDosLimites(posicao)) {
+            throw new IllegalArgumentException("ERRO: A posição indicada está fora dos limites do tabuleiro.");
+        }
+
+        Terreno terreno = terrenos[posicao.getLinha()][posicao.getColuna()];
+
+        return terreno.getPeca();
+    }
+
+    @Override
+    public Terreno obterTerrenoEm(Posicao posicao) {
+        if (!estaDentroDosLimites(posicao)) {
+            throw new IllegalArgumentException("ERRO: A posição indicada está fora dos limites do tabuleiro.");
+        }
+
+        return terrenos[posicao.getLinha()][posicao.getColuna()];
+    }
+
+    @Override
+    public void inicializaTerrenoPecas(List<Jogador> jogadores) {
+        if (jogadores.size() != 2) {
+            throw new IllegalArgumentException("ERRO: esse tabuleiro suporta apenas 2 jogadores.");
+        }
+
+        int[][][] matrizPosicoesPecas = {
+            { // Jogador 1 (linhas 0-8, colunas 0-6)
+                {1, 1}, {3, 1}, {1, 5}, {3, 3}, {2, 2}, {5, 5}, {2, 4}, {3, 5}
+            },
+            { // Jogador 2
+                {7, 5}, {5, 5}, {7, 1}, {5, 3}, {6, 4}, {5, 1}, {6, 2}, {5, 5}
+            }
+        };
+        String[] animaisNome = { "LEAO", "RATO", "TIGRE", "LEOPARDO", "CAO", "LOBO", "GATO", "ELEFANTE" };
+
+        FabricaAbstrataJogo selvaFactory = new SelvaJogoFactory();
+        for (int jogadorContador = 0; jogadorContador < jogadores.size(); jogadorContador++) {
+            int animaisNomeContador = 0;
+            for (var posicoesPecas : matrizPosicoesPecas[jogadorContador]) {
+                int linha = posicoesPecas[0];
+                int coluna = posicoesPecas[1];
+                terrenos[linha][coluna].setPeca(selvaFactory.criarPeca(jogadores.get(jogadorContador),
+                        new Posicao(linha, coluna), 1,  animaisNome[animaisNomeContador]));
+                animaisNomeContador += 1;
+            }
+        }
+    }
+}
+
+```
 # Padrões Comportamentais
     
 ## 9. State
