@@ -20,21 +20,34 @@ Jogador jogador = new Jogador("Carlos", "Azul", 100);
 
 ```mermaid
 classDiagram
-	class Jogador {
-		-String nome
-		-String cor
-		-int pontos
-		+Jogador(String nome, String cor, int pontos)
-		+getNome(): String
-		+getCor(): String
-		+getPontos(): int
-	}
+    class Peca {
+        <<abstract>>
+        -tipo: String
+        -forca: int
+        -jogador: Jogador
+        -posicao: Posicao
+    }
 
-	class Cliente {
-		+criarJogador()
-	}
+    class TipoAnimal {
+        <<enumeration>>
+        GATO
+        CACHORRO
+        ELEFANTE
+        LEOPARDO
+        LEAO
+        RATO
+        TIGRE
+        LOBO
+    }
 
-	Cliente --> Jogador
+    class Jogo {
+        -pecas: List~Peca~
+        +criarPeca(TipoAnimal, Posicao, Jogador): Peca
+    }
+
+    Peca --> TipoAnimal
+    Jogo --> Peca
+   
 ```
 
 ### Estrutura do padrão (GOF)
