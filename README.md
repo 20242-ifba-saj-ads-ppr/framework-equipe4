@@ -413,14 +413,15 @@ Construir famílias de peças para cada jogador sem especificar suas classes con
 
 ## Padrão aplicado no cenário
 
-### Descrição textual
-
 
 ### Participantes
 - **AbstractFactory (FabricaAbstratataJogo):** Define uma interface para criar uma família de peças e um tabuleiro.
-- **ConcreteFactory ():**
-- **AbstractProduct ():**
-- **ConcreteProduct ():**
+- **ConcreteFactory (SelvaJogoFactory):** implementa as operações que criam objetos-produto concretos.
+- **AbstractProduct (Peca, Tabuleiro):** declara uma interface para um tipo de objeto-produto
+- **ConcreteProduct (Animal, SelvaTabuleiro):** implementa a interface de Abstract Product.
+
+### Descrição textual
+
 
 ## 4. Singleton
 ### Intenção
