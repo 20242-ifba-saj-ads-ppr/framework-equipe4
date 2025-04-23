@@ -357,7 +357,7 @@ Construir famílias de peças para cada jogador sem especificar suas classes con
 
 
 
-### Prototype
+## Prototype
 
 ## Intenção  
 Especificar os tipos de objetos a serem criados usando uma instância prototípica e criar novos objetos copiando esse protótipo. – `GOF`
@@ -646,6 +646,20 @@ public interface RegrasJogoFacade {
 ### Código (Jogo): 
 
 COLOCAR
+
+## Adapter
+### intenção
+Converter a interface de uma classe em outra interface, esperada pelos clientes. O
+Adapter permite que classes com interfaces incompatíveis trabalhem em conjunto –
+o que, de outra forma, seria impossível.
+
+### Motivação
+
+### Cenário sem a aplicação do padrão
+
+### Estrutura do padrão (GOF)
+![image](https://github.com/user-attachments/assets/f0dd9d9e-3676-4e67-8fbe-805ff1ce832f)
+
 
 #Padrões Comportamentais
     
