@@ -88,14 +88,10 @@ classDiagram
 ```
 
 ### Participantes
-
-- Builder (BuilderJogador): Define a interface que define os métodos necessários para construir um Jogador.
-
-- ConcreteBuilder (ConstrutorJogador): Implementa a interface BuilderJogador que é responsável por construir o Jogador.
-
-- Director (DiretorJogador): Controla o processo de construção, o que garante que os passos sejam seguidos corretamente.
-
-- Product (Jogador): O objeto complexo que está sendo construído.
+- **Builder (BuilderJogador):** Define a interface que define os métodos necessários para construir um Jogador.
+- **ConcreteBuilder (ConstrutorJogador):** Implementa a interface BuilderJogador que é responsável por construir o Jogador.
+- **Director (DiretorJogador):** Controla o processo de construção, o que garante que os passos sejam seguidos corretamente.
+- **Product (Jogador):** O objeto complexo que está sendo construído.
 
 ### Descrição Textual
 A interface BuilderJogador define os métodos necessários para a construção de um objeto Jogador em um jogo. Esta interface age como um contrato, especificando as operações fundamentais que um construtor de jogadores deve implementar.
@@ -321,11 +317,10 @@ classDiagram
 ```
 
 ### Participantes
-
-- Creator (CriadorPeca): Classe abstrata que define o método factory, deixando para a fábrica a responsabilidade de instanciá-la corretamente.
-- ConcreteCreator (CriadorPecaSelvaConcreto): Implementação concreta de CriadorPeca, especializada na criação de peças do jogo.
-- Product (Peca): Define o contrato básico para todas as peças do jogo. Ela garante que todas as peças possam ser tratadas de maneira uniforme, permitindo que o código que manipula as peças seja flexível e extensível.
-- Client: Usa o método fábrica sem depender de implementações concretas das peças.
+- **Creator (CriadorPeca):** Classe abstrata que define o método factory, deixando para a fábrica a responsabilidade de instanciá-la corretamente.
+- **ConcreteCreator (CriadorPecaSelvaConcreto):** Implementação concreta de CriadorPeca, especializada na criação de peças do jogo.
+- **Product (Peca):** Define o contrato básico para todas as peças do jogo. Ela garante que todas as peças possam ser tratadas de maneira uniforme, permitindo que o código que manipula as peças seja flexível e extensível.
+- **Client:** Usa o método fábrica sem depender de implementações concretas das peças.
   
 ### Descrição textual
 
@@ -419,10 +414,10 @@ Construir famílias de peças para cada jogador sem especificar suas classes con
 
 
 ### Participantes
-- AbstractFactory (FabricaAbstratataJogo): Define uma interface para criar uma família de peças e um tabuleiro.
-- ConcreteFactory ():
-- AbstractProduct ():
-- ConcreteProduct ():
+- **AbstractFactory (FabricaAbstratataJogo):** Define uma interface para criar uma família de peças e um tabuleiro.
+- **ConcreteFactory ():**
+- **AbstractProduct ():**
+- **ConcreteProduct ():**
 
 
 
@@ -500,11 +495,10 @@ classDiagram
     Cliente --> PecaPrototype
 ```
 
-## Participantes
-
-- Prototype (PecaPrototype): Interface para clonagem de si mesmo.
-- ConcretePrototype (ex: Tigre, Rato): Implementa a clonagem de si mesmo, retornando uma nova instância com o mesmo estado.
-- Client: Usa o protótipo para clonar novos objetos sem depender diretamente de suas classes concretas.
+### Participantes
+- **Prototype (PecaPrototype)** Interface para clonagem de si mesmo.
+- **ConcretePrototype (ex: Tigre, Rato):** Implementa a clonagem de si mesmo, retornando uma nova instância com o mesmo estado.
+- **Client:** Usa o protótipo para clonar novos objetos sem depender diretamente de suas classes concretas.
 
 
 ### Código (Framework)
@@ -654,11 +648,10 @@ classDiagram
 
 
 ### Participantes
-
-- Facade (RegrasJogoFacade): Interface unificada para operações de turno, movimento e regras do jogo.
-- ConcreteFacade (RegrasJogoSelvaFacade): Implementação concreta da interface, orquestra as operações internas.
-- Subsistemas (GerenciadorTurnos, Peca): Componentes internos encapsulados pela fachada.
-- Cliente: Interage apenas com a fachada, sem conhecer os detalhes internos.
+- **Facade (RegrasJogoFacade):** Interface unificada para operações de turno, movimento e regras do jogo.
+- **ConcreteFacade (RegrasJogoSelvaFacade):** Implementação concreta da interface, orquestra as operações internas.
+- **Subsistemas (GerenciadorTurnos, Peca):** Componentes internos encapsulados pela fachada.
+- **Cliente:** Interage apenas com a fachada, sem conhecer os detalhes internos.
 
 ### Código
 
@@ -943,10 +936,10 @@ classDiagram
     Peca --> Posicao : possui
 ```
 ### Participantes
-- Command (Command): Define a interface comum para todos os comandos, com os métodos execute, undo e redo.
-- ConcreteCommand (MoverCommand): Implementa os comandos execute, executar e desfazer, referenciando o Jogador e Peca.
-- Receiver (Jogador e Peca): Realiza as operações reais que o comando abstrai.
-- Invoker (GerenciadorComandos): Armazena e executa os comandos. Ele chama o executar() no comando e mantém uma lista para desfazer as ações.
+- **Command (Command):** Define a interface comum para todos os comandos, com os métodos execute, undo e redo.
+- **ConcreteCommand (MoverCommand):** Implementa os comandos execute, executar e desfazer, referenciando o Jogador e Peca.
+- **Receiver (Jogador e Peca):** Realiza as operações reais que o comando abstrai.
+- **Invoker (GerenciadorComandos):** Armazena e executa os comandos. Ele chama o executar() no comando e mantém uma lista para desfazer as ações.
 
  
 ## Descrição textual
@@ -1111,9 +1104,9 @@ classDiagram
     Memento  --  Caretaker
 ```
 ### Participantes
-- Originator(Tabuleiro): A classe que cria o memento e restaura o seu estado a partir dele.
-- Memento (Memento):  A classe que armazena o estado do objeto originador. Ela contém os dados necessários para restaurar o estado do jogo.
-- Caretaker (Caretaker): A classe que gerencia os mementos e mantém o histórico dos estados.
+- **Originator(Tabuleiro):** A classe que cria o memento e restaura o seu estado a partir dele.
+- **Memento (Memento):**  A classe que armazena o estado do objeto originador. Ela contém os dados necessários para restaurar o estado do jogo.
+- **Caretaker (Caretaker):** A classe que gerencia os mementos e mantém o histórico dos estados.
   
 ### Descrição textual
 O padrão de projeto Memento é utilizado para salvar e carregar o estado do jogo. No nosso framework, a classe Memento armazena o estado do tabuleiro em um momento específico. Esta classe contém duas informações principais: o estado atual do tabuleiro, representado por uma lista de peças (List<String>), e uma lista de objetos do tipo Jogador, que representam as peças ativas do jogo.
