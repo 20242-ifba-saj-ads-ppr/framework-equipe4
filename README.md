@@ -178,7 +178,7 @@ classDiagram
 
     Peca --> TipoAnimal
     Jogo --> Peca
-
+```
 ---
 
 ## Estrutura do padrão (GOF)
