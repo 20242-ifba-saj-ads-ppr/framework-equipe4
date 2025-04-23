@@ -16,7 +16,7 @@ public class MovimentoRato implements EstrategiaMovimento {
         // Verifica se pode se mover para a posição destino (inclusive água)
         if (!tabuleiro.estaDentroDosLimites(destino)) return false;
 
-        Peca alvo = tabuleiro.getPecaEm(destino);
+        Peca alvo = tabuleiro.obterPecaEm(destino);
         String simbolo = tabuleiro.getSimbolo(destino);
 
         if (simbolo.equals("~") || simbolo.equals(" ")) {

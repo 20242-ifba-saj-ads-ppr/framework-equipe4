@@ -1,45 +1,48 @@
 package jogo;
 
-import framework.command.*;
-import framework.abstractFactory.*;
-import framework.builder.*;
+import framework.command.MoverCommand;
+import framework.command.GerenciadorComandos;
 import framework.model.Posicao;
+import framework.model.pecas.Peca;
+import framework.strategy.EstrategiaMovimento;
 import jogo.model.Animal;
 import jogo.strategy.MovimentoRato;
 import jogo.strategy.MovimentoElefante;
 import jogo.strategy.MovimentoPadrao;
-
+import framework.facade.GerenciadorTurnos;
 public class Main {
     public static void main(String[] args) {
-        // 1. Inicializa o jogo
-        JogoSelva jogo = new JogoSelva(); // Supondo que essa classe cria tabuleiro, jogadores e peças
-        // FabricaAbstrataJogo tabuleiroFactory = new SelvaTabuleiroFactory();
-        // TabuleiroSelva tabuleiro = tabuleiroFactory.criarTabuleiro();
-        // A FAZER: lista de jogadores correta
-        // var listaJogadores = new ArrayList<Jogador>();
-        // tabuleiro.inicializaTerrenoPecas(listaJogadores);
+        
+        // Inicializa o jogo
+       JogoSelva jogo = new JogoSelva();
 
-        // 2. Configura as estratégias de movimento para cada peça
+        // Configura as estratégias de movimento
         for (Animal animal : jogo.getAnimais()) {
             switch (animal.getTipoAnimal()) {
                 case RATO -> animal.setEstrategiaMovimento(new MovimentoRato());
                 case ELEFANTE -> animal.setEstrategiaMovimento(new MovimentoElefante());
                 default -> animal.setEstrategiaMovimento(new MovimentoPadrao());
             }
-        }
+        } 
 
-        // 3. Suponha que queremos mover o rato do jogador 1 da posição (2,2) para (3,2)
-        Animal rato = jogo.getAnimalEm(new Posicao(2, 2));
+        // Exemplo: mover o rato da posição (2,2) para (3,2)
+        Posicao origem = new Posicao(2, 2);
+        Animal rato = jogo.getAnimalEm(origem);
         Posicao destino = new Posicao(3, 2);
 
-        // 4. Cria o comando de mover
-        MoverCommand comando = new MoverCommand(rato.getJogador(), destino, rato);
+        // Garante que o rato existe na posição indicada
+        if (rato != null) {
+            GerenciadorTurnos gerenciadorTurnos = jogo.getGerenciadorTurnos(); // Esse método deve estar na classe JogoSelva
 
-        // 5. Executa o comando
-        InvocadorComandos invocador = new InvocadorComandos();
-        invocador.executarComando(comando);
+            // Cria comando de mover
+            MoverCommand comando = new MoverCommand(rato.getJogador(), destino, rato, gerenciadorTurnos);
 
-        // 6. (opcional) desfazer
-        // invocador.desfazerUltimoComando();
+            // Executa comando
+            GerenciadorComandos invocador = new GerenciadorComandos();
+            invocador.executarComando(comando);
+
+        } else {
+            System.out.println("Nenhum rato encontrado na posição (2,2).");
+        }
     }
 }

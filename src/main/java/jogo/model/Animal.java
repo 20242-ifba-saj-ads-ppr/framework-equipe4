@@ -20,6 +20,7 @@ public class Animal extends Peca{
     public Animal(String tipo, int forca, Jogador jogador, Posicao posicao) {
         super(tipo, forca, jogador, posicao);
         this.tipoAnimal = TipoAnimal.valueOf(tipo);
+
     }
 
     public TipoAnimal getTipoAnimal() {
@@ -35,11 +36,15 @@ public class Animal extends Peca{
     }
 
     public boolean mover(Posicao destino, Tabuleiro tabuleiro) {
-        if (estrategiaMovimento == null) {
-            System.out.println("Erro: estratégia de movimento não definida para " + this.getTipoAnimal());
-            return false;
-        }
-        return estrategiaMovimento.mover(this, destino, tabuleiro);
+    if (estrategiaMovimento == null) {
+        System.out.println("Erro: estratégia de movimento não definida para " + this.getTipoAnimal());
+        return false;
     }
+    return estrategiaMovimento.mover(this, destino, tabuleiro);
+}
+
+
+   
+
 }
 

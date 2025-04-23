@@ -15,8 +15,8 @@ public class MovimentoElefante implements EstrategiaMovimento {
 
         if (!tabuleiro.estaDentroDosLimites(destino)) return false;
 
-        Peca alvo = tabuleiro.getPecaEm(destino);
-        String simbolo = tabuleiro.getSimbolo(destino);
+        Peca alvo = tabuleiro.obterPecaEm(destino);
+        String simbolo = tabuleiro.obterTerrenoEm(destino).getSimbolo();
 
         // Elefante não pode entrar na água
         if (simbolo.equals("~")) {
@@ -34,7 +34,8 @@ public class MovimentoElefante implements EstrategiaMovimento {
             Animal alvoAnimal = (Animal) alvo;
 
             // Elefante não pode capturar rato na água
-            if (alvoAnimal.getTipoAnimal() == TipoAnimal.RATO && tabuleiro.getSimbolo(alvoAnimal.getPosicao()).equals("~")) {
+            String simboloAlvo = tabuleiro.obterTerrenoEm(alvoAnimal.getPosicao()).getSimbolo();
+            if (alvoAnimal.getTipoAnimal() == TipoAnimal.RATO && simboloAlvo.equals("~")) {
                 System.out.println("Elefante não pode capturar rato na água.");
                 return false;
             }

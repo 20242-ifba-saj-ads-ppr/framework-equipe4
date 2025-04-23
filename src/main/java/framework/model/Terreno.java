@@ -3,39 +3,35 @@ package framework.model;
 import framework.model.pecas.Peca;
 
 public class Terreno {
-    private int linha;
-    private int coluna;
+    private int linhas;
+    private int colunas;
     private TipoTerrenoEnum tipoTerreno;
     private Peca peca;
 
-    public Terreno(int linha, int coluna) {
-        this.linha = linha;
-        this.coluna = coluna;
-        this.tipoTerreno = TipoTerrenoEnum.COMUM;
-        this.peca = null;
+    public Peca getPeca() {
+        return peca;
     }
 
-    public Terreno(int linha, int coluna, TipoTerrenoEnum tipoTerreno) {
-        this.linha = linha;
-        this.coluna = coluna;
+    public Terreno(int linhas, int colunas, TipoTerrenoEnum tipoTerreno) {
+        this.linhas = linhas;
+        this.colunas = colunas;
         this.tipoTerreno = tipoTerreno;
-        this.peca = null;
     }
 
-    public int getlinha() {
-        return linha;
+    public int getLinhas() {
+        return linhas;
     }
 
-    public void setlinha(int linha) {
-        this.linha = linha;
+    public void setLinhas(int linhas) {
+        this.linhas = linhas;
     }
 
-    public int getcoluna() {
-        return coluna;
+    public int getColunas() {
+        return colunas;
     }
 
-    public void setcoluna(int coluna) {
-        this.coluna = coluna;
+    public void setColunas(int colunas) {
+        this.colunas = colunas;
     }
 
     public TipoTerrenoEnum getTipoTerreno() {
@@ -46,11 +42,11 @@ public class Terreno {
         this.tipoTerreno = tipoTerreno;
     }
 
-    public Peca getPeca() {
-        return peca;
+    public String getSimbolo() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getSimbolo'");
     }
 
-    public void setPeca(Peca peca) {
-        this.peca = peca;
-    }
+    
 }
+

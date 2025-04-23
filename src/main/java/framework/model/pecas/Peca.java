@@ -23,15 +23,14 @@ public abstract class Peca implements PecaPrototype {
         this.jogador = peca.jogador;
         this.posicao = peca.posicao;
     }
-
     @Override
     public Peca clonar() {
         try {
-            Peca clone = this.getClass().getDeclaredConstructor(this.getClass()).newInstance(this);
+            Peca clone = this.getClass().getDeclaredConstructor(this.getClass()).newInstance(this); 
             // Obtém o objeto Class que representa a classe real do objeto atual
             //(se this for um Elefante, retorna Elefante.class) Obtém o construtor que recebe um parâmetro do mesmo tipo da classe Cria uma nova instância usando o construtor de cópia,
             // passando o objeto atual (this) como parâmetro (equivalente a new Elefante(this)
-
+            
             return clone;
         } catch (Exception e) {
             throw new RuntimeException("Falha ao clonar peça", e);
@@ -60,5 +59,5 @@ public abstract class Peca implements PecaPrototype {
 
     public void setPosicao(Posicao posicao) {
         this.posicao = posicao;
-    }
+    } 
 }
