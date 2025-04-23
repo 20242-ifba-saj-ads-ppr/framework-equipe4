@@ -404,6 +404,7 @@ COLOCAR
 Construir famílias de peças para cada jogador sem especificar suas classes concretas.
 
 ### Motivação
+A implementação do padrão Abstract Factory na elaboração do framework de jogos é justificada pela demanda por flexibilidade e escalabilidade na elaboração de diversos jogos com estruturas similares, porém lógicas diferentes.  Jogos como Damas e Selva compartilham a ideia de peças em um tabuleiro, contudo, apresentam diferenças em termos de regras, aparência e comportamento. Através do Abstract Factory, conseguimos transformar essas variações em fábricas tangíveis, assegurando que as peças e o tabuleiro gerados estejam no mesmo contexto e sejam compatíveis entre si.  Isso favorece a unidade entre os componentes do jogo, simplifica a manutenção do código e possibilita a inclusão de novos jogos sem a exigência de modificar a estrutura básica do framework.  Assim, o padrão garante uma arquitetura limpa, genérica e flexível para diversas implementações.
 
 
 ### Cenário sem a aplicação do padrão
